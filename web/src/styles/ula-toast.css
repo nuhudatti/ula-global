@@ -1,0 +1,203 @@
+.ula-toast-stack {
+  position: fixed;
+  z-index: 90;
+  bottom: 1.35rem;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column-reverse;
+  gap: 0.7rem;
+  width: min(23rem, calc(100vw - 2rem));
+  pointer-events: none;
+}
+
+@media (min-width: 640px) {
+  .ula-toast-stack {
+    left: auto;
+    right: 1.35rem;
+    transform: none;
+    width: min(26rem, calc(100vw - 2.5rem));
+  }
+}
+
+.ula-toast {
+  pointer-events: auto;
+  display: flex;
+  align-items: flex-start;
+  gap: 0.9rem;
+  border-radius: 20px;
+  padding: 1rem 1.05rem 0.9rem;
+  box-shadow:
+    0 28px 72px -20px rgba(15, 23, 42, 0.32),
+    0 8px 24px -8px rgba(15, 23, 42, 0.12),
+    0 0 0 1px rgba(255, 255, 255, 0.72) inset;
+  backdrop-filter: blur(24px) saturate(180%);
+  animation: ula-toast-in 0.52s cubic-bezier(0.16, 1, 0.3, 1);
+  overflow: hidden;
+  position: relative;
+}
+
+.ula-toast::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.55) 0%, transparent 48%);
+  pointer-events: none;
+}
+
+@keyframes ula-toast-in {
+  0% {
+    opacity: 0;
+    transform: translateY(18px) scale(0.92);
+  }
+  60% {
+    opacity: 1;
+    transform: translateY(-2px) scale(1.01);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.ula-toast--success {
+  background: rgba(255, 255, 255, 0.96);
+  border: 1px solid rgba(34, 197, 94, 0.32);
+  color: #14532d;
+}
+
+.ula-toast--info {
+  background: rgba(255, 255, 255, 0.96);
+  border: 1px solid rgba(59, 130, 246, 0.28);
+  color: #1e3a8a;
+}
+
+.ula-toast--error {
+  background: rgba(255, 255, 255, 0.96);
+  border: 1px solid rgba(239, 68, 68, 0.28);
+  color: #991b1b;
+}
+
+.ula-toast__icon-wrap {
+  position: relative;
+  z-index: 1;
+  flex-shrink: 0;
+  display: flex;
+  height: 2.4rem;
+  width: 2.4rem;
+  align-items: center;
+  justify-content: center;
+  border-radius: 13px;
+  font-size: 1rem;
+  box-shadow: 0 4px 12px -4px rgba(15, 23, 42, 0.15);
+}
+
+.ula-toast--success .ula-toast__icon-wrap {
+  background: linear-gradient(145deg, rgba(34, 197, 94, 0.2), rgba(34, 197, 94, 0.08));
+  color: #15803d;
+}
+
+.ula-toast--info .ula-toast__icon-wrap {
+  background: linear-gradient(145deg, rgba(59, 130, 246, 0.18), rgba(59, 130, 246, 0.06));
+  color: #1d4ed8;
+}
+
+.ula-toast--error .ula-toast__icon-wrap {
+  background: linear-gradient(145deg, rgba(239, 68, 68, 0.18), rgba(239, 68, 68, 0.06));
+  color: #b91c1c;
+}
+
+.ula-toast__body {
+  position: relative;
+  z-index: 1;
+  flex: 1;
+  min-width: 0;
+  padding-top: 0.15rem;
+}
+
+.ula-toast__title {
+  font-size: 0.86rem;
+  font-weight: 650;
+  letter-spacing: -0.02em;
+  line-height: 1.3;
+}
+
+.ula-toast__message {
+  margin-top: 0.25rem;
+  font-size: 0.77rem;
+  line-height: 1.45;
+  opacity: 0.84;
+}
+
+.ula-toast__close {
+  position: relative;
+  z-index: 1;
+  flex-shrink: 0;
+  border: none;
+  background: transparent;
+  color: inherit;
+  opacity: 0.42;
+  padding: 0.25rem;
+  cursor: pointer;
+  border-radius: 10px;
+  transition: opacity 0.15s ease, background 0.15s ease;
+}
+
+.ula-toast__close:hover {
+  opacity: 0.95;
+  background: rgba(15, 23, 42, 0.06);
+}
+
+.ula-toast__progress {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  height: 3px;
+  border-radius: 0 3px 3px 0;
+  animation: ula-toast-progress linear forwards;
+  opacity: 0.85;
+}
+
+.ula-toast--success .ula-toast__progress {
+  background: linear-gradient(90deg, #22c55e, #4ade80);
+}
+
+.ula-toast--info .ula-toast__progress {
+  background: linear-gradient(90deg, #3b82f6, #60a5fa);
+}
+
+.ula-toast--error .ula-toast__progress {
+  background: linear-gradient(90deg, #ef4444, #f87171);
+}
+
+@keyframes ula-toast-progress {
+  from {
+    width: 100%;
+  }
+  to {
+    width: 0%;
+  }
+}
+
+.ula-assignment-download {
+  animation: ula-download-pulse 2.8s ease-in-out 1;
+}
+
+@keyframes ula-download-pulse {
+  0%,
+  100% {
+    box-shadow: 0 8px 24px -12px rgba(20, 83, 45, 0.18);
+  }
+  50% {
+    box-shadow: 0 12px 32px -10px rgba(20, 83, 45, 0.28);
+  }
+}
+
+.ula-assignment-download__btn {
+  transition: transform 0.18s cubic-bezier(0.16, 1, 0.3, 1), background 0.15s ease;
+}
+
+.ula-assignment-download__btn:active {
+  transform: scale(0.97);
+}

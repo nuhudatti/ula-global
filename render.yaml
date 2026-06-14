@@ -1,0 +1,43 @@
+# Render Blueprint — ULA Platform
+# https://render.com/docs/blueprint-spec
+services:
+  - type: web
+    name: ula-platform
+    runtime: node
+    plan: starter
+    buildCommand: npm install && npm run build
+    startCommand: npm start
+    healthCheckPath: /api/health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: HOST
+        value: 0.0.0.0
+      - key: DATABASE_URL
+        fromDatabase:
+          name: ula-db
+          property: connectionString
+      - key: JWT_SECRET
+        generateValue: true
+      - key: PLATFORM_JWT_SECRET
+        generateValue: true
+      - key: CLIENT_ORIGIN
+        sync: false
+      - key: APP_PUBLIC_URL
+        sync: false
+      - key: PUBLIC_BASE_URL
+        sync: false
+      - key: CLOUDINARY_CLOUD_NAME
+        sync: false
+      - key: CLOUDINARY_API_KEY
+        sync: false
+      - key: CLOUDINARY_API_SECRET
+        sync: false
+      - key: SMTP_PASS
+        sync: false
+
+databases:
+  - name: ula-db
+    plan: starter
+    databaseName: ula
+    user: ula_app

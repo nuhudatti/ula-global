@@ -1,0 +1,69 @@
+/**
+ * IBBUL-ULA Design System — Ibrahim Badamasi Babangida University brand harmony.
+ * Seal palette: forest green (trust), fresh lime ring (energy), neutrals (clarity).
+ * Restrained use of crest red for rare emphasis only.
+ */
+
+:root {
+  /* Brand (official seal family) */
+  --ula-brand-forest: #14532d;
+  --ula-brand-green: #166534;
+  --ula-brand-bright: #22c55e;
+  --ula-brand-lime: #84cc16;
+  --ula-brand-crest-red: #c41e3a;
+
+  /* Canvas — whisper of institutional green */
+  --ula-bg: #f4f9f6;
+  --ula-bg-elevated: #ffffff;
+  --ula-border: rgba(20, 83, 45, 0.1);
+  --ula-border-strong: rgba(20, 83, 45, 0.16);
+
+  /* Text */
+  --ula-text: #0f172a;
+  --ula-text-secondary: #475569;
+  --ula-text-muted: #64748b;
+  --ula-text-inverse: #f8fafc;
+
+  /* Accent — primary actions (academic trust, not consumer neon) */
+  --ula-accent: #15803d;
+  --ula-accent-hover: #166534;
+  --ula-accent-muted: #dcfce7;
+  --ula-accent-subtle: rgba(34, 197, 94, 0.12);
+
+  /* Semantic */
+  --ula-success: #15803d;
+  --ula-warning: #d97706;
+  --ula-danger: #b91c1c;
+
+  /* Radius */
+  --ula-radius-sm: 6px;
+  --ula-radius-md: 10px;
+  --ula-radius-lg: 14px;
+  --ula-radius-xl: 18px;
+
+  /* Shadows — cool green undertone */
+  --ula-shadow-sm: 0 1px 2px rgba(15, 23, 42, 0.05);
+  --ula-shadow-md: 0 8px 24px rgba(20, 83, 45, 0.08);
+  --ula-shadow-nav: 0 1px 0 var(--ula-border);
+
+  /* Motion */
+  --ula-ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --ula-duration: 160ms;
+
+  /* Layout */
+  --ula-nav-h: 56px;
+  --ula-max-width: 1120px;
+  --ula-sidebar-w: 260px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --ula-duration: 0ms;
+  }
+}
+
+/* Focus visible — accessibility default */
+.ula-focus-ring:focus-visible {
+  outline: 2px solid var(--ula-accent);
+  outline-offset: 2px;
+}

@@ -1,0 +1,190 @@
+/* Faculty governance — extends department institutional system */
+.ula-faculty-root {
+  --fw-sidebar: 260px;
+  --fw-header: 64px;
+  min-height: 100dvh;
+  background: linear-gradient(168deg, #f4f7fb 0%, #eef4f8 38%, #f1f5f9 100%);
+}
+
+.ula-faculty-sidebar {
+  width: var(--fw-sidebar);
+  border-right: 1px solid rgba(15, 23, 42, 0.06);
+  background: rgba(255, 255, 255, 0.78);
+  backdrop-filter: blur(18px) saturate(160%);
+}
+
+.ula-faculty-nav-item {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  width: 100%;
+  border-radius: 14px;
+  padding: 0.7rem 1rem;
+  font-size: 13px;
+  font-weight: 500;
+  color: #475569;
+  transition: background 0.15s, color 0.15s, box-shadow 0.15s;
+}
+
+.ula-faculty-nav-item:hover {
+  background: rgba(15, 23, 42, 0.04);
+  color: #0f172a;
+}
+
+.ula-faculty-nav-item[data-active='true'] {
+  background: linear-gradient(135deg, rgba(15, 76, 129, 0.14) 0%, rgba(30, 58, 95, 0.06) 100%);
+  color: #0f4c81;
+  font-weight: 600;
+  box-shadow: inset 0 0 0 1px rgba(15, 76, 129, 0.1);
+}
+
+.ula-faculty-dept-card {
+  border-radius: 18px;
+  border: 1px solid rgba(15, 23, 42, 0.06);
+  background: rgba(255, 255, 255, 0.92);
+  padding: 1.25rem 1.35rem;
+  transition: box-shadow 0.2s, transform 0.2s;
+}
+
+.ula-faculty-dept-card:hover {
+  box-shadow: 0 12px 40px -20px rgba(15, 76, 129, 0.15);
+}
+
+.ula-faculty-stream-item {
+  display: flex;
+  gap: 0.75rem;
+  padding: 0.75rem 0;
+  border-bottom: 1px solid rgba(15, 23, 42, 0.05);
+}
+
+.ula-faculty-stream-item:last-child {
+  border-bottom: none;
+}
+
+/* Academic personnel — enterprise roster */
+.ula-faculty-personnel {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.ula-faculty-personnel__header {
+  margin-bottom: 0;
+}
+
+.ula-faculty-personnel__kpis {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.75rem;
+}
+
+@media (min-width: 640px) {
+  .ula-faculty-personnel__kpis {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+  }
+}
+
+.ula-faculty-personnel__kpi {
+  border-radius: 16px;
+  border: 1px solid rgba(15, 23, 42, 0.06);
+  background: rgba(255, 255, 255, 0.95);
+  padding: 1rem 1.1rem;
+}
+
+.ula-faculty-personnel__kpi[data-tone='active'] {
+  border-color: rgba(16, 185, 129, 0.2);
+  background: linear-gradient(145deg, #fff 0%, #f0fdf9 100%);
+}
+
+.ula-faculty-personnel__kpi[data-tone='inactive'] {
+  border-color: rgba(239, 68, 68, 0.15);
+  background: linear-gradient(145deg, #fff 0%, #fef8f8 100%);
+}
+
+.ula-faculty-personnel__kpi[data-tone='pending'] {
+  border-color: rgba(245, 158, 11, 0.25);
+  background: linear-gradient(145deg, #fff 0%, #fffbeb 100%);
+}
+
+.ula-faculty-personnel__kpi-label {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #94a3b8;
+}
+
+.ula-faculty-personnel__kpi-value {
+  margin-top: 0.35rem;
+  font-size: 1.75rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  color: #0f172a;
+}
+
+.ula-faculty-personnel__toolbar {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+@media (min-width: 900px) {
+  .ula-faculty-personnel__toolbar {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
+}
+
+.ula-faculty-personnel__tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  padding: 0.25rem;
+  border-radius: 14px;
+  background: rgba(15, 23, 42, 0.04);
+}
+
+.ula-faculty-personnel__tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  border-radius: 11px;
+  border: none;
+  background: transparent;
+  padding: 0.5rem 0.85rem;
+  font-size: 12px;
+  font-weight: 600;
+  color: #64748b;
+  cursor: pointer;
+  transition: background 0.12s, color 0.12s, box-shadow 0.12s;
+}
+
+.ula-faculty-personnel__tab[data-active='true'] {
+  background: #fff;
+  color: #0f4c81;
+  box-shadow: 0 2px 8px -2px rgba(15, 23, 42, 0.12);
+}
+
+.ula-faculty-personnel__tab-count {
+  border-radius: 999px;
+  background: rgba(15, 76, 129, 0.08);
+  padding: 0.1rem 0.45rem;
+  font-size: 10px;
+  font-weight: 700;
+  color: #0f4c81;
+}
+
+.ula-faculty-personnel__filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem;
+  width: 100%;
+}
+
+@media (min-width: 900px) {
+  .ula-faculty-personnel__filters {
+    width: auto;
+    justify-content: flex-end;
+  }
+}

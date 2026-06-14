@@ -1,0 +1,20 @@
+/** Backward-compatible barrel — all email sending goes through ./email/ */
+export {
+  getAppPublicUrl,
+  getPublicBaseUrl,
+  getClientOrigin,
+  isSmtpConfigured,
+  sendEmail,
+  sendInviteEmail,
+  sendLecturerInvitationEmail,
+  sendInstitutionAdminWelcomeEmail,
+  sendInstitutionActivationEmail,
+  sendWelcomeCredentialsEmail,
+  sendPasswordResetEmail,
+  sendNotificationEmail,
+  sendTestEmail,
+  verifySmtpConnection,
+  getEmailStatus,
+  logEmailStartupStatus,
+  warnIfProductionWithoutSmtp,
+} from './email/index.js';

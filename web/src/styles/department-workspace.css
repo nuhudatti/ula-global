@@ -1,0 +1,366 @@
+/* ULA Department Workspace — institutional cloud OS aesthetic */
+
+.ula-dept-root {
+  --dw-sidebar: 248px;
+  --dw-header: 64px;
+  min-height: 100dvh;
+  background: linear-gradient(165deg, #f8fafc 0%, #f4f8f6 42%, #f1f5f9 100%);
+  color: var(--ula-text);
+}
+
+.ula-dept-sidebar {
+  width: var(--dw-sidebar);
+  border-right: 1px solid rgba(15, 23, 42, 0.06);
+  background: rgba(255, 255, 255, 0.72);
+  backdrop-filter: blur(16px) saturate(160%);
+}
+
+.ula-dept-nav-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  width: 100%;
+  border-radius: 12px;
+  padding: 0.625rem 0.875rem;
+  font-size: 13px;
+  font-weight: 500;
+  color: #475569;
+  transition: background-color 0.15s ease, color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.ula-dept-nav-item:hover {
+  background: rgba(15, 23, 42, 0.04);
+  color: #0f172a;
+}
+
+.ula-dept-nav-item[data-active='true'] {
+  background: linear-gradient(135deg, rgba(15, 76, 129, 0.12) 0%, rgba(21, 128, 61, 0.08) 100%);
+  color: #0f4c81;
+  font-weight: 600;
+  box-shadow: inset 0 0 0 1px rgba(15, 76, 129, 0.12);
+}
+
+.ula-dept-surface {
+  border: 1px solid rgba(15, 23, 42, 0.06);
+  background: rgba(255, 255, 255, 0.88);
+  border-radius: 20px;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04), 0 12px 40px -16px rgba(15, 23, 42, 0.08);
+  backdrop-filter: blur(8px);
+}
+
+.ula-dept-stat {
+  border-radius: 16px;
+  border: 1px solid rgba(15, 23, 42, 0.05);
+  background: rgba(255, 255, 255, 0.9);
+  padding: 1.25rem 1.35rem;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.03);
+}
+
+.ula-dept-wizard-step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.35rem;
+  min-width: 4.5rem;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  color: #94a3b8;
+}
+
+.ula-dept-wizard-step span:first-child {
+  display: flex;
+  height: 2rem;
+  width: 2rem;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  border: 1.5px solid #cbd5e1;
+  font-size: 12px;
+}
+
+.ula-dept-wizard-step[data-active='true'] {
+  color: #0f4c81;
+}
+
+.ula-dept-wizard-step[data-active='true'] span:first-child {
+  border-color: #0f4c81;
+  background: #0f4c81;
+  color: #fff;
+}
+
+.ula-dept-wizard-step[data-done='true'] {
+  color: #334155;
+}
+
+.ula-dept-wizard-step[data-done='true'] span:first-child {
+  border-color: #15803d;
+  background: #15803d;
+  color: #fff;
+}
+
+.ula-dept-lecturer-row {
+  display: grid;
+  grid-template-columns: minmax(200px, 1.4fr) minmax(140px, 1fr) minmax(120px, 0.8fr) auto;
+  gap: 1rem;
+  align-items: center;
+  padding: 1rem 1.25rem;
+  border-bottom: 1px solid rgba(15, 23, 42, 0.05);
+  transition: background 0.12s ease;
+}
+
+.ula-dept-lecturer-row:hover {
+  background: rgba(15, 76, 129, 0.03);
+}
+
+.ula-dept-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  border-radius: 999px;
+  padding: 0.2rem 0.65rem;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+.ula-dept-badge[data-status='ACTIVE'],
+.ula-dept-badge[data-status='VERIFIED'] {
+  background: #ecfdf5;
+  color: #047857;
+}
+
+.ula-dept-badge[data-status='PENDING'],
+.ula-dept-badge[data-status='PENDING_REVIEW'] {
+  background: #fffbeb;
+  color: #b45309;
+}
+
+.ula-dept-badge[data-status='SUSPENDED'],
+.ula-dept-badge[data-status='ARCHIVED'] {
+  background: #fef2f2;
+  color: #b91c1c;
+}
+
+.ula-dept-badge[data-status='UNVERIFIED'] {
+  background: #f1f5f9;
+  color: #475569;
+}
+
+.ula-dept-search {
+  border-radius: 12px;
+  border: 1px solid rgba(15, 23, 42, 0.08);
+  background: rgba(255, 255, 255, 0.85);
+  padding: 0.55rem 0.9rem 0.55rem 2.35rem;
+  font-size: 13px;
+  min-width: 220px;
+}
+
+/* —— Overview v2: calm cockpit (minimal) —— */
+.ula-dept-v2 {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  padding-bottom: 2rem;
+}
+
+.ula-dept-v2-hero {
+  margin-bottom: 0;
+}
+
+.ula-dept-v2-kpi {
+  border-radius: 16px;
+  border: 1px solid rgba(15, 23, 42, 0.06);
+  background: #fff;
+  padding: 1.15rem 1.25rem;
+  text-align: left;
+  cursor: pointer;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+.ula-dept-v2-kpi:hover {
+  border-color: rgba(15, 76, 129, 0.25);
+  box-shadow: 0 6px 20px -8px rgba(15, 76, 129, 0.15);
+}
+
+.ula-dept-v2-panel {
+  border-radius: 18px;
+  border: 1px solid rgba(15, 23, 42, 0.06);
+  background: #fff;
+  padding: 1.25rem 1.35rem;
+}
+
+.ula-dept-v2-action {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  border-radius: 14px;
+  border: 1px solid rgba(15, 23, 42, 0.06);
+  background: #f8fafc;
+  padding: 1rem 0.5rem;
+  font-size: 12px;
+  font-weight: 600;
+  color: #334155;
+  cursor: pointer;
+  transition: background 0.12s, border-color 0.12s;
+}
+
+.ula-dept-v2-action:hover {
+  background: #fff;
+  border-color: rgba(15, 76, 129, 0.2);
+}
+
+/* legacy overview (audit page may use audit-row) */
+.ula-dept-overview-hero {
+  border-radius: 22px;
+  border: 1px solid rgba(15, 76, 129, 0.1);
+  background: linear-gradient(145deg, #ffffff 0%, #f8fafc 45%, #f0f7ff 100%);
+  padding: 1.75rem 2rem;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04), 0 20px 50px -24px rgba(15, 76, 129, 0.18);
+}
+
+.ula-dept-overview-action {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  width: 100%;
+  border-radius: 14px;
+  border: 1px solid rgba(15, 23, 42, 0.08);
+  background: rgba(255, 255, 255, 0.92);
+  padding: 0.85rem 1rem;
+  text-align: left;
+  transition: border-color 0.15s, box-shadow 0.15s, transform 0.12s;
+  cursor: pointer;
+}
+
+.ula-dept-overview-action:hover {
+  border-color: rgba(15, 76, 129, 0.28);
+  box-shadow: 0 8px 24px -12px rgba(15, 76, 129, 0.2);
+  transform: translateY(-1px);
+}
+
+.ula-dept-overview-action:active {
+  transform: translateY(0);
+}
+
+.ula-dept-overview-action-icon {
+  display: flex;
+  height: 2.25rem;
+  width: 2.25rem;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+  background: rgba(15, 76, 129, 0.08);
+  color: #0f4c81;
+  flex-shrink: 0;
+}
+
+.ula-dept-overview-kpi {
+  border-radius: 18px;
+  border: 1px solid rgba(15, 23, 42, 0.06);
+  background: #fff;
+  padding: 1.25rem 1.35rem;
+  transition: border-color 0.15s, box-shadow 0.2s;
+}
+
+.ula-dept-audit-row {
+  display: flex;
+  gap: 1rem;
+  align-items: flex-start;
+  padding: 1rem 1.5rem;
+  transition: background 0.12s;
+  cursor: pointer;
+}
+
+.ula-dept-audit-row:hover {
+  background: rgba(15, 76, 129, 0.04);
+}
+
+.ula-dept-audit-icon {
+  flex-shrink: 0;
+  display: flex;
+  height: 2.5rem;
+  width: 2.5rem;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12px;
+}
+
+.ula-dept-audit-icon--publish {
+  background: rgba(59, 130, 246, 0.12);
+  color: #2563eb;
+}
+
+.ula-dept-audit-icon--invite {
+  background: rgba(16, 185, 129, 0.12);
+  color: #059669;
+}
+
+.ula-dept-audit-icon--lecturer {
+  background: rgba(15, 76, 129, 0.1);
+  color: #0f4c81;
+}
+
+.ula-dept-audit-pill {
+  border-radius: 999px;
+  background: #f1f5f9;
+  padding: 0.15rem 0.5rem;
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: #64748b;
+}
+
+.ula-dept-skeleton {
+  animation: dept-pulse 1.4s ease-in-out infinite;
+  background: linear-gradient(90deg, #f1f5f9 0%, #e2e8f0 50%, #f1f5f9 100%);
+  background-size: 200% 100%;
+  border-radius: 16px;
+}
+
+@keyframes dept-pulse {
+  0% {
+    background-position: 100% 0;
+  }
+  100% {
+    background-position: -100% 0;
+  }
+}
+
+.ula-dept-animate-in {
+  animation: dept-fade-in 0.35s ease-out;
+}
+
+@keyframes dept-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 1023px) {
+  .ula-dept-sidebar {
+    position: fixed;
+    z-index: 60;
+    inset: 0 auto 0 0;
+    transform: translateX(-100%);
+    transition: transform 0.22s ease;
+  }
+
+  .ula-dept-sidebar[data-open='true'] {
+    transform: translateX(0);
+  }
+
+  .ula-dept-lecturer-row {
+    grid-template-columns: 1fr;
+    gap: 0.5rem;
+  }
+}

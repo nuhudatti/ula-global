@@ -1,0 +1,65 @@
+export const ROLES = {
+  STUDENT: 'STUDENT',
+  LECTURER: 'LECTURER',
+  HOD: 'HOD',
+  DEPARTMENT_ADMIN: 'DEPARTMENT_ADMIN',
+  FACULTY_ADMIN: 'FACULTY_ADMIN',
+  INSTITUTION_ADMIN: 'INSTITUTION_ADMIN',
+  SUPER_ADMIN: 'SUPER_ADMIN',
+  ACADEMIC_RESOURCES_MANAGER: 'ACADEMIC_RESOURCES_MANAGER',
+};
+
+export const ARM_INVITE_ROLE = 'ACADEMIC_RESOURCES_MANAGER';
+
+export const RESOURCE_PUBLISH_ROLES = [
+  ROLES.LECTURER,
+  ROLES.ACADEMIC_RESOURCES_MANAGER,
+  ROLES.INSTITUTION_ADMIN,
+  ROLES.SUPER_ADMIN,
+];
+
+export const RESOURCE_MANAGE_ROLES = [
+  ROLES.ACADEMIC_RESOURCES_MANAGER,
+  ROLES.INSTITUTION_ADMIN,
+  ROLES.SUPER_ADMIN,
+];
+
+export const RESOURCE_KINDS = [
+  'LECTURE_NOTES',
+  'PAST_QUESTIONS',
+  'HANDOUT',
+  'LAB_MANUAL',
+  'ASSIGNMENT',
+  'PROJECT',
+  'OTHER',
+];
+
+export const SOURCE_TYPES = {
+  ULA_TEAM: 'ULA_TEAM',
+  INSTITUTION: 'INSTITUTION',
+  LECTURER: 'LECTURER',
+  STUDENT: 'STUDENT',
+};
+
+export function canPublishResources(role) {
+  return RESOURCE_PUBLISH_ROLES.includes(role);
+}
+
+export function canManageResources(role) {
+  return RESOURCE_MANAGE_ROLES.includes(role);
+}
+
+export function resolveUploadSourceType(role, requested) {
+  const normalized = String(requested || '').trim().toUpperCase();
+  if (
+    normalized === SOURCE_TYPES.ULA_TEAM &&
+    [ROLES.ACADEMIC_RESOURCES_MANAGER, ROLES.INSTITUTION_ADMIN, ROLES.SUPER_ADMIN].includes(role)
+  ) {
+    return SOURCE_TYPES.ULA_TEAM;
+  }
+  if ([ROLES.ACADEMIC_RESOURCES_MANAGER, ROLES.INSTITUTION_ADMIN, ROLES.SUPER_ADMIN].includes(role)) {
+    return SOURCE_TYPES.INSTITUTION;
+  }
+  if (role === ROLES.LECTURER) return SOURCE_TYPES.LECTURER;
+  return SOURCE_TYPES.LECTURER;
+}

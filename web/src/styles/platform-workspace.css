@@ -1,0 +1,74 @@
+.ula-platform-root {
+  --platform-sidebar: 15.5rem;
+  background: #f4f6f8;
+}
+
+.ula-platform-sidebar {
+  width: var(--platform-sidebar);
+  background: #0f172a;
+  color: #e2e8f0;
+}
+
+.ula-platform-nav-item {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  gap: 0.65rem;
+  border-radius: 0.65rem;
+  padding: 0.65rem 0.85rem;
+  font-size: 0.84rem;
+  font-weight: 500;
+  color: #94a3b8;
+  transition: background-color 0.15s, color 0.15s;
+}
+
+.ula-platform-nav-item[data-active='true'] {
+  background: rgba(255, 255, 255, 0.08);
+  color: #fff;
+}
+
+.ula-platform-kpi {
+  border-radius: 1rem;
+  border: 1px solid rgba(15, 23, 42, 0.08);
+  background: #fff;
+  padding: 1.1rem 1.25rem;
+}
+
+.ula-platform-login {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(160deg, #0f172a 0%, #1e293b 45%, #f8fafc 45%);
+  padding: 2rem;
+}
+
+.ula-platform-login__card {
+  width: 100%;
+  max-width: 26rem;
+  border-radius: 1.25rem;
+  background: #fff;
+  padding: 2rem;
+  box-shadow: 0 24px 60px rgba(15, 23, 42, 0.18);
+}
+
+.ula-platform-login__eyebrow {
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #64748b;
+}
+
+.ula-platform-login__title {
+  margin-top: 0.35rem;
+  font-size: 1.55rem;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.ula-platform-login__sub {
+  margin-top: 0.5rem;
+  font-size: 0.88rem;
+  line-height: 1.5;
+  color: #64748b;
+}

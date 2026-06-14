@@ -1,0 +1,373 @@
+.ula-acad-disc {
+  --ad-accent: #0f4c81;
+}
+
+.ula-acad-disc--panel {
+  border-radius: 20px;
+  border: 1px solid rgba(15, 76, 129, 0.1);
+  background: linear-gradient(160deg, #fff 0%, #f8fbff 100%);
+  box-shadow: 0 10px 40px -16px rgba(15, 76, 129, 0.15);
+}
+
+.ula-acad-disc__head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 1.15rem 1.25rem 0.85rem;
+  border-bottom: 1px solid rgba(15, 23, 42, 0.06);
+}
+
+.ula-acad-disc__title {
+  font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  color: #0f172a;
+}
+
+.ula-acad-disc__sub {
+  margin-top: 0.2rem;
+  font-size: 12px;
+  color: #64748b;
+  max-width: 36rem;
+}
+
+.ula-acad-disc__live-hint {
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid rgba(15, 23, 42, 0.04);
+  padding-bottom: 0.45rem;
+}
+
+.ula-acad-disc__stream {
+  max-height: 360px;
+  overflow-y: auto;
+  padding: 0.75rem 1rem 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+}
+
+.ula-acad-disc--full .ula-acad-disc__stream {
+  max-height: 480px;
+}
+
+.ula-acad-disc__msg {
+  display: flex;
+  gap: 0.65rem;
+  align-items: flex-start;
+  border-radius: 14px;
+  padding: 0.7rem 0.8rem;
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid rgba(15, 23, 42, 0.05);
+  transition: border-color 0.12s;
+}
+
+.ula-acad-disc__msg:hover {
+  border-color: rgba(15, 76, 129, 0.15);
+}
+
+.ula-acad-disc__msg--reply {
+  background: rgba(248, 250, 252, 0.95);
+}
+
+.ula-acad-disc__msg--to-me {
+  border-color: rgba(245, 158, 11, 0.35);
+  background: linear-gradient(135deg, #fffbeb 0%, #fff 100%);
+}
+
+.ula-acad-disc__to-me {
+  border-radius: 999px;
+  padding: 0.1rem 0.45rem;
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  background: #fef3c7;
+  color: #b45309;
+}
+
+.ula-acad-disc__msg--lecturer {
+  border-color: rgba(16, 185, 129, 0.2);
+  background: linear-gradient(135deg, #f0fdf9 0%, #fff 100%);
+}
+
+.ula-acad-disc__badge {
+  border-radius: 999px;
+  padding: 0.12rem 0.5rem;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+}
+
+.ula-acad-disc__badge--student {
+  background: #eff6ff;
+  color: #1d4ed8;
+}
+
+.ula-acad-disc__badge--lecturer {
+  background: #ecfdf5;
+  color: #047857;
+}
+
+.ula-acad-disc__badge--staff {
+  background: #f5f3ff;
+  color: #6d28d9;
+}
+
+.ula-acad-disc__compose {
+  border-top: 1px solid rgba(15, 23, 42, 0.06);
+  padding: 1rem 1.25rem 1.15rem;
+  background: rgba(248, 250, 252, 0.6);
+  border-radius: 0 0 20px 20px;
+}
+
+.ula-acad-disc__input {
+  width: 100%;
+  border-radius: 12px;
+  border: 1px solid rgba(15, 23, 42, 0.1);
+  background: #fff;
+  padding: 0.65rem 0.85rem;
+  font-size: 13px;
+  resize: vertical;
+  min-height: 2.75rem;
+}
+
+.ula-acad-disc__input:focus {
+  outline: none;
+  border-color: rgba(15, 76, 129, 0.35);
+  box-shadow: 0 0 0 3px rgba(15, 76, 129, 0.08);
+}
+
+.ula-student-dash {
+  min-height: calc(100dvh - var(--ula-nav-h));
+  background: linear-gradient(168deg, #f4f7fb 0%, #eef4f8 38%, #f8fafc 100%);
+}
+
+.ula-student-dash__hero {
+  border-radius: 22px;
+  border: 1px solid rgba(15, 76, 129, 0.1);
+  background: linear-gradient(145deg, #fff 0%, #f0f7ff 55%, #e8f2fa 100%);
+  padding: 1.5rem 1.75rem;
+  box-shadow: 0 12px 40px -20px rgba(15, 76, 129, 0.18);
+}
+
+.ula-student-dash__kpi {
+  border-radius: 16px;
+  border: 1px solid rgba(15, 23, 42, 0.06);
+  background: rgba(255, 255, 255, 0.95);
+  padding: 1rem 1.1rem;
+}
+
+.ula-student-dash__kpi-val {
+  font-size: 1.65rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  color: #0f172a;
+}
+
+.ula-acad-disc--full {
+  border-radius: 20px;
+  border: 1px solid rgba(15, 76, 129, 0.1);
+  background: linear-gradient(160deg, #fff 0%, #f8fbff 100%);
+  box-shadow: 0 10px 40px -16px rgba(15, 76, 129, 0.12);
+}
+
+.ula-acad-disc--popup {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  flex: 1;
+}
+
+.ula-acad-disc--popup .ula-acad-disc__stream {
+  max-height: min(52vh, 420px);
+  flex: 1;
+}
+
+.ula-acad-disc__thread {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid rgba(15, 23, 42, 0.05);
+}
+
+.ula-acad-disc__thread:last-child {
+  border-bottom: none;
+}
+
+.ula-acad-disc__reply-to {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 11px;
+  color: #64748b;
+  background: rgba(15, 76, 129, 0.05);
+  border-radius: 8px;
+  padding: 0.25rem 0.5rem;
+  width: fit-content;
+  max-width: 100%;
+}
+
+.ula-acad-disc__reply-banner {
+  border-radius: 12px;
+  border: 1px solid rgba(15, 76, 129, 0.15);
+  background: rgba(240, 247, 255, 0.9);
+  padding: 0.55rem 0.7rem;
+}
+
+/* Floating Q&A button — browse page */
+.ula-disc-fab {
+  position: fixed;
+  right: 1.25rem;
+  bottom: 1.5rem;
+  z-index: 45;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.2rem;
+  border: none;
+  cursor: pointer;
+  background: transparent;
+  padding: 0;
+}
+
+.ula-disc-fab__icon-wrap {
+  position: relative;
+}
+
+.ula-disc-fab__icon {
+  display: flex;
+  height: 3.5rem;
+  width: 3.5rem;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  background: linear-gradient(145deg, #0f4c81 0%, #1a6eb5 100%);
+  color: #fff;
+  font-size: 1.15rem;
+  box-shadow: 0 8px 28px -4px rgba(15, 76, 129, 0.45);
+  transition: transform 0.15s, box-shadow 0.15s;
+}
+
+.ula-disc-fab:hover .ula-disc-fab__icon {
+  transform: scale(1.04);
+  box-shadow: 0 12px 32px -4px rgba(15, 76, 129, 0.5);
+}
+
+.ula-disc-fab__badge {
+  position: absolute;
+  top: 0;
+  right: 0.15rem;
+  min-width: 1.15rem;
+  height: 1.15rem;
+  border-radius: 999px;
+  background: #0f4c81;
+  color: #fff;
+  font-size: 10px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 0.25rem;
+  border: 2px solid #fff;
+}
+
+.ula-disc-fab__badge--inbox {
+  background: #f59e0b;
+}
+
+.ula-disc-fab__label {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: #0f4c81;
+}
+
+.ula-disc-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  background: rgba(15, 23, 42, 0.4);
+  backdrop-filter: blur(4px);
+  padding: 0.75rem;
+}
+
+@media (min-width: 640px) {
+  .ula-disc-modal-backdrop {
+    align-items: center;
+    padding: 1.5rem;
+  }
+}
+
+.ula-disc-modal {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 520px;
+  max-height: min(88vh, 640px);
+  border-radius: 22px;
+  background: #fff;
+  box-shadow: 0 24px 80px -20px rgba(15, 23, 42, 0.35);
+  overflow: hidden;
+  animation: ula-disc-modal-in 0.22s ease-out;
+}
+
+@keyframes ula-disc-modal-in {
+  from {
+    opacity: 0;
+    transform: translateY(12px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.ula-disc-modal__head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1rem 1.15rem;
+  border-bottom: 1px solid rgba(15, 23, 42, 0.06);
+  background: linear-gradient(180deg, #f8fbff 0%, #fff 100%);
+}
+
+.ula-disc-modal__title {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #0f172a;
+}
+
+.ula-disc-modal__sub {
+  margin-top: 0.15rem;
+  font-size: 12px;
+  color: #64748b;
+}
+
+.ula-disc-modal__close {
+  flex-shrink: 0;
+  display: flex;
+  height: 2rem;
+  width: 2rem;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+  border: 1px solid rgba(15, 23, 42, 0.08);
+  background: #fff;
+  color: #64748b;
+  cursor: pointer;
+}
+
+.ula-disc-modal__close:hover {
+  background: #f8fafc;
+  color: #0f172a;
+}

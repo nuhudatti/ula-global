@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboards — IBBUL ULA</title>
+  <link rel="icon" type="image/png" href="ibbul-logo.png" />
+  <meta name="description" content="Role-based dashboards for IBBUL ULA — prototype shell until backend APIs connect.">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;550;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="styles/design-system.css">
+  <link rel="stylesheet" href="styles/app-shell.css">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: { 50: '#f0fdf4', 100: '#dcfce7', 500: '#22c55e', 600: '#16a34a', 700: '#15803d', 800: '#166534', 900: '#14532d' },
+            secondary: { 50: '#eef2ff', 100: '#e0e7ff', 500: '#6366f1', 600: '#4f46e5', 700: '#4338ca' },
+            dark: { 50: '#f8fafc', 100: '#f1f5f9', 200: '#e2e8f0', 300: '#cbd5e1', 400: '#94a3b8', 500: '#64748b', 600: '#475569', 700: '#334155', 800: '#1e293b', 900: '#0f172a' },
+          },
+          fontFamily: { sans: ['Inter', 'ui-sans-serif', 'system-ui'] },
+        },
+      },
+    };
+  </script>
+  <style>
+    body { font-family: Inter, system-ui, sans-serif; }
+    [hidden] { display: none !important; }
+  </style>
+</head>
+<body class="antialiased bg-[var(--ula-bg)] text-[var(--ula-text)] min-h-screen">
+  <header class="ula-shell-nav px-4 md:px-6 flex items-center justify-between gap-4">
+    <a href="index.html" class="flex items-center gap-3">
+      <img src="ibbul-logo.png" alt="Ibrahim Badamasi Babangida University, Lapai" width="36" height="36" class="h-9 w-9 shrink-0 rounded-full object-cover ring-1 ring-dark-200/90 bg-white shadow-sm" loading="eager" />
+      <div>
+        <div class="text-[15px] font-semibold text-dark-900 tracking-tight">IBBUL<span class="text-primary-600">ULA</span></div>
+        <div class="text-[11px] text-dark-500 hidden sm:block">Dashboard prototype</div>
+      </div>
+    </a>
+    <a href="index.html" class="text-sm font-medium text-dark-600 hover:text-dark-900 ula-focus-ring rounded px-2 py-1">
+      ← Back to repository
+    </a>
+  </header>
+
+  <div class="flex flex-col lg:flex-row min-h-[calc(100vh-var(--ula-nav-h))] pt-[var(--ula-nav-h)]">
+    <!-- Role navigation -->
+    <aside class="lg:w-[var(--ula-sidebar-w)] shrink-0 border-b lg:border-b-0 lg:border-r border-dark-200 bg-white/90 backdrop-blur-sm lg:min-h-[calc(100vh-var(--ula-nav-h))] lg:sticky lg:top-[var(--ula-nav-h)] lg:self-start">
+      <div class="p-4 lg:p-6">
+        <p class="text-[11px] font-semibold uppercase tracking-wider text-dark-400 mb-3">View as role</p>
+        <nav id="role-nav" class="flex lg:flex-col gap-1 overflow-x-auto pb-2 lg:pb-0 lg:overflow-visible snap-x snap-mandatory lg:snap-none">
+          <!-- Buttons injected by JS -->
+        </nav>
+      </div>
+      <div class="hidden lg:block px-6 pb-6 text-xs text-dark-500 leading-relaxed border-t border-dark-100 pt-4 mx-4">
+        RBAC connects here: JWT claims scope faculties, departments, courses, and uploads per role.
+      </div>
+    </aside>
+
+    <main id="dash-main" class="flex-1 min-w-0 p-4 md:p-8 max-w-[960px] mx-auto w-full">
+      <!-- Panels rendered by JS -->
+    </main>
+  </div>
+
+  <script>
+(function () {
+  const ROLES = [
+    { id: 'student', label: 'Student', icon: 'fa-graduation-cap', description: 'Search, download, organise saves.' },
+    { id: 'lecturer', label: 'Lecturer', icon: 'fa-chalkboard-user', description: 'Upload materials tied to assigned courses.' },
+    { id: 'hod', label: 'Dept admin (HOD)', icon: 'fa-building-user', description: 'Department courses & lecturer roster.' },
+    { id: 'faculty', label: 'Faculty admin', icon: 'fa-school', description: 'Faculty-wide departments & policies.' },
+    { id: 'super', label: 'Super admin', icon: 'fa-shield-halved', description: 'Platform faculties, audits, tenants.' },
+  ];
+
+  let active = sessionStorage.getItem('ula-dashboard-role') || 'student';
+
+  function el(html) {
+    const t = document.createElement('template');
+    t.innerHTML = html.trim();
+    return t.content.firstChild;
+  }
+
+  function kpi(label, value, hint) {
+    return `
+      <div class="ula-panel p-5 border-dark-200">
+        <p class="text-[11px] font-semibold uppercase tracking-wide text-dark-400 mb-1">${label}</p>
+        <p class="text-2xl font-semibold tabular-nums text-dark-900">${value}</p>
+        <p class="text-xs text-dark-500 mt-2">${hint}</p>
+      </div>`;
+  }
+
+  function placeholderBlock(title, rows) {
+    return `
+      <div class="ula-panel overflow-hidden mt-6">
+        <div class="px-5 py-4 border-b border-dark-100 bg-dark-50/50 flex justify-between items-center gap-4">
+          <h3 class="font-semibold text-dark-900">${title}</h3>
+          <span class="text-xs text-dark-400 font-medium">Coming with API</span>
+        </div>
+        <div class="divide-y divide-dark-100">
+          ${rows.map((r) => `
+            <div class="px-5 py-3 flex justify-between gap-4 text-sm">
+              <span class="text-dark-700">${r.left}</span>
+              <span class="text-dark-500 shrink-0">${r.right}</span>
+            </div>`).join('')}
+        </div>
+      </div>`;
+  }
+
+  const panels = {
+    student: `
+      <div class="mb-8">
+        <p class="text-xs font-semibold uppercase tracking-wider text-primary-700 mb-2">Student workspace</p>
+        <h1 class="text-2xl md:text-3xl font-semibold text-dark-900 tracking-tight mb-2">Discover & download</h1>
+        <p class="text-dark-600 max-w-xl leading-relaxed text-sm md:text-base">
+          Optimised for fast search across faculties and departments. Saved lists and history sync once accounts ship.
+        </p>
+      </div>
+      <div class="grid sm:grid-cols-3 gap-4">
+        ${kpi('Saved items', '—', 'Local-only until auth')}
+        ${kpi('Downloads this week', '—', 'Tracked post-login')}
+        ${kpi('Courses followed', '—', 'Enrollment module')}
+      </div>
+      ${placeholderBlock('Recent activity', [
+        { left: 'Opened CSC301 past questions', right: 'Placeholder' },
+        { left: 'Filtered Management Sciences', right: 'Placeholder' },
+      ])}`,
+
+    lecturer: `
+      <div class="mb-8">
+        <p class="text-xs font-semibold uppercase tracking-wider text-primary-700 mb-2">Lecturer workspace</p>
+        <h1 class="text-2xl md:text-3xl font-semibold text-dark-900 tracking-tight mb-2">Uploads & analytics</h1>
+        <p class="text-dark-600 max-w-xl leading-relaxed text-sm md:text-base">
+          Ownership per course: lecture notes, past questions, assignments → Cloudinary URLs stored in PostgreSQL with RBAC checks.
+        </p>
+      </div>
+      <div class="grid sm:grid-cols-3 gap-4">
+        ${kpi('Materials uploaded', '—', 'After backend')}
+        ${kpi('Downloads (90d)', '—', 'Analytics pipeline')}
+        ${kpi('Active courses', '—', 'Assignment-bound')}
+      </div>
+      ${placeholderBlock('Upload queue', [
+        { left: 'PDF · CSC212 · Lecture week 4', right: 'Draft' },
+        { left: 'ZIP · STA201 · Assignment data', right: 'Awaiting virus scan' },
+      ])}`,
+
+    hod: `
+      <div class="mb-8">
+        <p class="text-xs font-semibold uppercase tracking-wider text-primary-700 mb-2">Department (HOD)</p>
+        <h1 class="text-2xl md:text-3xl font-semibold text-dark-900 tracking-tight mb-2">Courses & lecturers</h1>
+        <p class="text-dark-600 max-w-xl leading-relaxed text-sm md:text-base">
+          Scoped to one department: approve lecturers, align courses to programmes, monitor visibility rules for materials.
+        </p>
+      </div>
+      <div class="grid sm:grid-cols-3 gap-4">
+        ${kpi('Lecturers', '—', 'Department roster')}
+        ${kpi('Courses', '—', 'Normalized schema')}
+        ${kpi('Pending approvals', '—', 'Moderation queue')}
+      </div>
+      ${placeholderBlock('Department overview', [
+        { left: 'Computer Science · 400 level courses', right: 'View' },
+        { left: 'Assign lecturer · CSC411', right: 'Edit' },
+      ])}`,
+
+    faculty: `
+      <div class="mb-8">
+        <p class="text-xs font-semibold uppercase tracking-wider text-primary-700 mb-2">Faculty admin</p>
+        <h1 class="text-2xl md:text-3xl font-semibold text-dark-900 tracking-tight mb-2">Faculty structure</h1>
+        <p class="text-dark-600 max-w-xl leading-relaxed text-sm md:text-base">
+          Create departments, delegate HODs, enforce quotas and branding — isolated from other faculties unless super-admin opens visibility.
+        </p>
+      </div>
+      <div class="grid sm:grid-cols-3 gap-4">
+        ${kpi('Departments', '—', 'Under this faculty')}
+        ${kpi('Policies', '—', 'Upload limits / MIME')}
+        ${kpi('Cross-dept visibility', 'Off', 'Policy toggle')}
+      </div>
+      ${placeholderBlock('Faculty registry', [
+        { left: 'Department · Mathematics', right: 'HOD assigned' },
+        { left: 'Department · Computer Science', right: 'HOD assigned' },
+      ])}`,
+
+    super: `
+      <div class="mb-8">
+        <p class="text-xs font-semibold uppercase tracking-wider text-primary-700 mb-2">Super admin</p>
+        <h1 class="text-2xl md:text-3xl font-semibold text-dark-900 tracking-tight mb-2">Platform control</h1>
+        <p class="text-dark-600 max-w-xl leading-relaxed text-sm md:text-base">
+          Faculties, global audits, tenant-level rules (future multi-institution), integration keys for Cloudinary and observability.
+        </p>
+      </div>
+      <div class="grid sm:grid-cols-3 gap-4">
+        ${kpi('Faculties', '—', 'Tenant roots')}
+        ${kpi('Audit events / 24h', '—', 'Immutable log')}
+        ${kpi('Storage budget', '—', 'Cloudinary usage')}
+      </div>
+      ${placeholderBlock('Audit trail', [
+        { left: 'Faculty Admin login · Faculty of Science', right: 'Timestamp' },
+        { left: 'Resource publish · CSC212', right: 'Timestamp' },
+      ])}`,
+  };
+
+  function renderNav() {
+    const nav = document.getElementById('role-nav');
+    nav.innerHTML = ROLES.map((r) => `
+      <button type="button" data-role="${r.id}"
+        class="role-tab snap-start shrink-0 lg:w-full text-left flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium border transition-colors ula-focus-ring
+        ${active === r.id ? 'bg-dark-900 text-white border-dark-900' : 'bg-white border-dark-200 text-dark-700 hover:bg-dark-50'}">
+        <span class="w-8 h-8 rounded-md flex items-center justify-center ${active === r.id ? 'bg-white/15' : 'bg-dark-100 text-dark-600'}">
+          <i class="fas ${r.icon} text-sm"></i>
+        </span>
+        <span class="whitespace-nowrap lg:whitespace-normal">${r.label}</span>
+      </button>
+    `).join('');
+
+    nav.querySelectorAll('.role-tab').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        active = btn.getAttribute('data-role');
+        sessionStorage.setItem('ula-dashboard-role', active);
+        renderNav();
+        renderPanel();
+      });
+    });
+  }
+
+  function renderPanel() {
+    const main = document.getElementById('dash-main');
+    main.innerHTML = panels[active] || panels.student;
+  }
+
+  renderNav();
+  renderPanel();
+})();
+  </script>
+</body>
+</html>

@@ -1,0 +1,140 @@
+/* App shell — navigation, surfaces, chrome */
+
+body {
+  background-color: var(--ula-bg);
+  color: var(--ula-text);
+}
+
+.ula-shell-nav {
+  position: relative;
+  height: var(--ula-nav-h);
+  border-bottom: 1px solid var(--ula-border);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.97) 0%, rgba(244, 249, 246, 0.94) 100%);
+  backdrop-filter: saturate(180%) blur(12px);
+  box-shadow: var(--ula-shadow-nav);
+}
+
+/* Crest accent — lime → forest (seal ring meets shield) */
+.ula-shell-nav::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, var(--ula-brand-lime), var(--ula-accent) 55%, var(--ula-brand-forest));
+  opacity: 0.92;
+  pointer-events: none;
+}
+
+.ula-shell-brand-mark {
+  width: 36px;
+  height: 36px;
+  border-radius: var(--ula-radius-md);
+  background: linear-gradient(145deg, var(--ula-brand-green) 0%, var(--ula-brand-forest) 100%);
+  color: #fff;
+  font-weight: 700;
+  font-size: 14px;
+  letter-spacing: -0.02em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ula-shell-link {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--ula-text-secondary);
+  transition: color var(--ula-duration) var(--ula-ease);
+}
+
+.ula-shell-link:hover {
+  color: var(--ula-text);
+}
+
+.ula-shell-link[data-active="true"] {
+  color: var(--ula-accent);
+}
+
+.ula-panel {
+  border: 1px solid var(--ula-border);
+  border-radius: var(--ula-radius-lg);
+  background: var(--ula-bg-elevated);
+  box-shadow: var(--ula-shadow-sm);
+}
+
+.ula-panel-muted {
+  background: rgba(248, 250, 252, 0.85);
+}
+
+/* Stat strip — IBBU prestige: deep forest into slate */
+.ula-stat-strip {
+  border-radius: var(--ula-radius-lg);
+  border: 1px solid rgba(20, 83, 45, 0.35);
+  background: linear-gradient(
+    155deg,
+    #0f1f14 0%,
+    var(--ula-brand-forest) 38%,
+    #1e293b 78%,
+    #0f172a 100%
+  );
+  color: var(--ula-text-inverse);
+  box-shadow:
+    0 1px 0 rgba(132, 204, 22, 0.12) inset,
+    var(--ula-shadow-md);
+}
+
+/* Cards — crisp edge instead of heavy shadow */
+.ula-resource-surface {
+  border: 1px solid var(--ula-border);
+  border-radius: var(--ula-radius-md);
+  transition:
+    border-color var(--ula-duration) var(--ula-ease),
+    box-shadow var(--ula-duration) var(--ula-ease);
+}
+
+.ula-resource-surface:hover {
+  border-color: rgba(21, 128, 61, 0.35);
+  box-shadow: var(--ula-shadow-md);
+}
+
+/* Buttons — primary solid; no rainbow gradients */
+.btn-ula-primary {
+  background: var(--ula-accent);
+  color: #fff;
+  font-weight: 600;
+  font-size: 13px;
+  border-radius: var(--ula-radius-sm);
+  padding: 8px 14px;
+  transition: background var(--ula-duration) var(--ula-ease);
+}
+
+.btn-ula-primary:hover {
+  background: var(--ula-accent-hover);
+}
+
+.btn-ula-secondary {
+  background: var(--ula-bg-elevated);
+  color: var(--ula-text);
+  border: 1px solid var(--ula-border-strong);
+  font-weight: 500;
+  font-size: 13px;
+  border-radius: var(--ula-radius-sm);
+  padding: 8px 14px;
+}
+
+.btn-ula-secondary:hover {
+  background: #f8fafc;
+}
+
+/* Mobile drawer */
+.mobile-menu {
+  transform: translateX(-100%);
+  transition: transform 260ms var(--ula-ease);
+  pointer-events: none;
+}
+
+.mobile-menu.open {
+  transform: translateX(0);
+  pointer-events: auto;
+}

@@ -1,0 +1,467 @@
+/* Super Admin — platform control layer */
+.ula-admin-root {
+  --aw-sidebar: 268px;
+  --aw-header: 64px;
+  min-height: 100dvh;
+  background: linear-gradient(165deg, #f8fafc 0%, #eef2f7 42%, #f1f5f9 100%);
+}
+
+.ula-admin-sidebar {
+  width: var(--aw-sidebar);
+  border-right: 1px solid rgba(15, 23, 42, 0.07);
+  background: rgba(255, 255, 255, 0.82);
+  backdrop-filter: blur(20px) saturate(160%);
+}
+
+.ula-admin-nav-item {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  width: 100%;
+  border-radius: 14px;
+  padding: 0.72rem 1rem;
+  font-size: 13px;
+  font-weight: 500;
+  color: #475569;
+  transition: background 0.15s, color 0.15s, box-shadow 0.15s;
+}
+
+.ula-admin-nav-item:hover {
+  background: rgba(15, 23, 42, 0.04);
+  color: #0f172a;
+}
+
+.ula-admin-nav-item[data-active='true'] {
+  background: linear-gradient(135deg, rgba(20, 83, 45, 0.12) 0%, rgba(22, 101, 52, 0.05) 100%);
+  color: #14532d;
+  font-weight: 600;
+  box-shadow: inset 0 0 0 1px rgba(22, 101, 52, 0.12);
+}
+
+.ula-admin-kpi {
+  border-radius: 18px;
+  border: 1px solid rgba(15, 23, 42, 0.06);
+  background: rgba(255, 255, 255, 0.94);
+  padding: 1.25rem 1.35rem;
+}
+
+.ula-admin-faculty-card {
+  border-radius: 20px;
+  border: 1px solid rgba(15, 23, 42, 0.06);
+  background: rgba(255, 255, 255, 0.95);
+  transition: box-shadow 0.2s, transform 0.2s, border-color 0.2s;
+}
+
+.ula-admin-faculty-card:hover {
+  box-shadow: 0 16px 48px -24px rgba(20, 83, 45, 0.18);
+  border-color: rgba(22, 101, 52, 0.12);
+}
+
+.ula-admin-faculty-card[data-expanded='true'] {
+  box-shadow: 0 20px 56px -28px rgba(15, 76, 129, 0.2);
+  border-color: rgba(15, 76, 129, 0.15);
+}
+
+.ula-admin-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  border-radius: 999px;
+  padding: 0.2rem 0.65rem;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.ula-admin-badge--live {
+  background: rgba(22, 163, 74, 0.1);
+  color: #15803d;
+}
+
+.ula-admin-badge--empty {
+  background: rgba(100, 116, 139, 0.1);
+  color: #64748b;
+}
+
+/* Faculty admin roster — invitation lifecycle */
+.ula-admin-roster {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.ula-admin-roster-card {
+  border-radius: 18px;
+  border: 1px solid rgba(15, 23, 42, 0.06);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.98) 0%, rgba(248, 250, 252, 0.92) 100%);
+  padding: 1.1rem 1.2rem;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.ula-admin-roster-card:hover {
+  border-color: rgba(22, 101, 52, 0.14);
+  box-shadow: 0 12px 36px -28px rgba(15, 76, 129, 0.35);
+}
+
+.ula-admin-roster-card__main {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.9rem 1rem;
+}
+
+.ula-admin-roster-card__identity {
+  flex: 1;
+  min-width: 0;
+}
+
+.ula-admin-roster-card__name {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #0f172a;
+  letter-spacing: -0.01em;
+}
+
+.ula-admin-roster-card__email {
+  margin-top: 0.15rem;
+  font-size: 0.75rem;
+  color: #64748b;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.ula-admin-roster-card__meta {
+  margin-top: 0.35rem;
+  font-size: 0.68rem;
+  color: #94a3b8;
+}
+
+.ula-admin-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  border-radius: 999px;
+  padding: 0.28rem 0.72rem;
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+}
+
+.ula-admin-status__dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+}
+
+.ula-admin-status--pending {
+  background: rgba(245, 158, 11, 0.12);
+  color: #b45309;
+}
+
+.ula-admin-status--pending .ula-admin-status__dot {
+  background: #f59e0b;
+  box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.2);
+}
+
+.ula-admin-status--active {
+  background: rgba(22, 163, 74, 0.1);
+  color: #15803d;
+}
+
+.ula-admin-status--active .ula-admin-status__dot {
+  background: #22c55e;
+  box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.18);
+}
+
+.ula-admin-status--expired {
+  background: rgba(100, 116, 139, 0.1);
+  color: #64748b;
+}
+
+.ula-admin-status--expired .ula-admin-status__dot {
+  background: #94a3b8;
+}
+
+.ula-admin-roster-card__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.95rem;
+  padding-top: 0.95rem;
+  border-top: 1px solid rgba(15, 23, 42, 0.05);
+}
+
+.ula-admin-action {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  border-radius: 12px;
+  border: 1px solid rgba(15, 23, 42, 0.08);
+  background: rgba(255, 255, 255, 0.9);
+  padding: 0.5rem 0.85rem;
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: #334155;
+  transition: background 0.15s, border-color 0.15s, color 0.15s, transform 0.12s;
+}
+
+.ula-admin-action:hover:not(:disabled) {
+  background: #fff;
+  border-color: rgba(15, 76, 129, 0.18);
+  color: #0f4c81;
+  transform: translateY(-1px);
+}
+
+.ula-admin-action:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.ula-admin-action--primary {
+  background: linear-gradient(135deg, #14532d 0%, #166534 100%);
+  border-color: transparent;
+  color: #fff;
+}
+
+.ula-admin-action--primary:hover:not(:disabled) {
+  background: linear-gradient(135deg, #166534 0%, #15803d 100%);
+  color: #fff;
+  border-color: transparent;
+}
+
+.ula-admin-action--danger {
+  color: #b91c1c;
+  border-color: rgba(239, 68, 68, 0.18);
+}
+
+.ula-admin-action--danger:hover:not(:disabled) {
+  background: rgba(254, 242, 242, 0.9);
+  border-color: rgba(239, 68, 68, 0.28);
+  color: #991b1b;
+}
+
+.ula-admin-roster-empty {
+  border-radius: 18px;
+  border: 1px dashed rgba(15, 23, 42, 0.1);
+  background: rgba(248, 250, 252, 0.6);
+  padding: 2rem 1.5rem;
+  text-align: center;
+}
+
+.ula-admin-roster-empty__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 3rem;
+  height: 3rem;
+  border-radius: 14px;
+  background: rgba(20, 83, 45, 0.08);
+  color: #166534;
+  font-size: 1.1rem;
+}
+
+.ula-admin-roster-empty__title {
+  margin-top: 0.85rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #0f172a;
+}
+
+.ula-admin-roster-empty__text {
+  margin-top: 0.35rem;
+  font-size: 0.78rem;
+  color: #64748b;
+  max-width: 28rem;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.ula-admin-toast {
+  position: fixed;
+  right: 1.25rem;
+  bottom: 1.25rem;
+  z-index: 80;
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  max-width: min(24rem, calc(100vw - 2rem));
+  border-radius: 16px;
+  padding: 0.95rem 1rem;
+  box-shadow: 0 24px 64px -20px rgba(15, 23, 42, 0.35);
+  backdrop-filter: blur(16px) saturate(150%);
+  animation: ula-admin-toast-in 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@keyframes ula-admin-toast-in {
+  from {
+    opacity: 0;
+    transform: translateY(12px) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.ula-admin-toast--success {
+  border: 1px solid rgba(34, 197, 94, 0.25);
+  background: rgba(240, 253, 244, 0.95);
+  color: #14532d;
+}
+
+.ula-admin-toast--info {
+  border: 1px solid rgba(59, 130, 246, 0.22);
+  background: rgba(239, 246, 255, 0.95);
+  color: #1e40af;
+}
+
+.ula-admin-toast--error {
+  border: 1px solid rgba(239, 68, 68, 0.22);
+  background: rgba(254, 242, 242, 0.95);
+  color: #991b1b;
+}
+
+.ula-admin-toast__icon {
+  margin-top: 0.1rem;
+  font-size: 1rem;
+  opacity: 0.9;
+}
+
+.ula-admin-toast__text {
+  flex: 1;
+  font-size: 0.8rem;
+  line-height: 1.45;
+}
+
+.ula-admin-toast__close {
+  border: none;
+  background: transparent;
+  color: inherit;
+  opacity: 0.55;
+  padding: 0.15rem;
+  cursor: pointer;
+}
+
+.ula-admin-toast__close:hover {
+  opacity: 1;
+}
+
+/* Invitation credentials — visible to admins when email is dev/outbox or as backup */
+.ula-invite-credentials {
+  border-radius: 18px;
+  border: 1px solid rgba(22, 163, 74, 0.22);
+  background: linear-gradient(165deg, rgba(240, 253, 244, 0.95) 0%, rgba(255, 255, 255, 0.98) 100%);
+  padding: 1.25rem 1.35rem;
+  text-align: center;
+}
+
+.ula-invite-credentials__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 3rem;
+  height: 3rem;
+  border-radius: 14px;
+  background: rgba(22, 163, 74, 0.12);
+  color: #15803d;
+  font-size: 1.35rem;
+}
+
+.ula-invite-credentials__title {
+  margin-top: 0.85rem;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #0f172a;
+}
+
+.ula-invite-credentials__text {
+  margin-top: 0.4rem;
+  font-size: 0.8rem;
+  line-height: 1.5;
+  color: #475569;
+  max-width: 32rem;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.ula-invite-credentials__otp {
+  margin-top: 1rem;
+  border-radius: 14px;
+  background: rgba(15, 76, 129, 0.06);
+  padding: 1rem 1.1rem;
+  border: 1px solid rgba(15, 76, 129, 0.12);
+}
+
+.ula-invite-credentials__label {
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #64748b;
+}
+
+.ula-invite-credentials__code {
+  margin-top: 0.35rem;
+  font-size: 1.65rem;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  color: #0f4c81;
+}
+
+.ula-invite-credentials__link {
+  margin-top: 0.75rem;
+  border-radius: 12px;
+  background: #fff;
+  border: 1px solid rgba(15, 23, 42, 0.08);
+  padding: 0.85rem 1rem;
+  text-align: left;
+}
+
+.ula-invite-credentials__url {
+  margin-top: 0.35rem;
+  font-size: 0.72rem;
+  line-height: 1.45;
+  color: #334155;
+  word-break: break-all;
+}
+
+.ula-invite-credentials__copy {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin-top: 0.65rem;
+  border-radius: 10px;
+  border: 1px solid rgba(15, 23, 42, 0.1);
+  background: #fff;
+  padding: 0.45rem 0.75rem;
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: #334155;
+}
+
+.ula-invite-credentials__copy:hover {
+  border-color: rgba(15, 76, 129, 0.25);
+  color: #0f4c81;
+}
+
+.ula-invite-credentials__hint {
+  margin-top: 0.85rem;
+  font-size: 0.72rem;
+  color: #64748b;
+}
+
+.ula-invite-credentials__done {
+  margin-top: 1rem;
+  border-radius: 12px;
+  background: #14532d;
+  padding: 0.55rem 1.25rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #fff;
+}

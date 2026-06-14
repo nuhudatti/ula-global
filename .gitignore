@@ -1,0 +1,19 @@
+node_modules/
+.env
+web/dist/
+*.log
+.DS_Store
+prisma/dev.db
+prisma/*.db
+prisma/*.db-journal
+prisma/sqlite-export.json
+prisma/migration-report.json
+
+# Local uploads when Cloudinary is not configured
+uploads/
+
+# Dev email outbox (when SMTP not configured)
+data/email-outbox/
+
+# Dev off-site database backups (outside repo)
+ula-backups/

@@ -1,0 +1,285 @@
+/* Live campus pulse — browse + auth */
+.ula-campus-pulse {
+  --pulse-accent: #0f4c81;
+  position: relative;
+}
+
+.ula-campus-pulse__live {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #047857;
+}
+
+.ula-campus-pulse__live-dot {
+  width: 0.45rem;
+  height: 0.45rem;
+  border-radius: 999px;
+  background: #10b981;
+  box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.45);
+  animation: ula-pulse-live 2s ease-out infinite;
+}
+
+@keyframes ula-pulse-live {
+  0% {
+    box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.5);
+  }
+  70% {
+    box-shadow: 0 0 0 8px rgba(16, 185, 129, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(16, 185, 129, 0);
+  }
+}
+
+.ula-campus-pulse--compact {
+  border-radius: 20px;
+  border: 1px solid rgba(15, 76, 129, 0.1);
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.98) 0%, rgba(240, 247, 255, 0.92) 100%);
+  padding: 1.1rem 1.25rem;
+  box-shadow: 0 8px 32px -12px rgba(15, 76, 129, 0.12);
+}
+
+.ula-campus-pulse--hero {
+  border-radius: 22px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: linear-gradient(155deg, rgba(10, 61, 107, 0.96) 0%, rgba(15, 76, 129, 0.92) 55%, rgba(26, 110, 181, 0.88) 100%);
+  padding: 1.5rem 1.35rem;
+  color: #f8fafc;
+  min-height: 100%;
+}
+
+.ula-campus-pulse__head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.ula-campus-pulse__title {
+  font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+
+.ula-campus-pulse--hero .ula-campus-pulse__title {
+  font-size: 1.15rem;
+  color: #fff;
+}
+
+.ula-campus-pulse__stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.ula-campus-pulse__stat {
+  border-radius: 999px;
+  padding: 0.25rem 0.65rem;
+  font-size: 11px;
+  font-weight: 600;
+  background: rgba(15, 76, 129, 0.08);
+  color: #334155;
+}
+
+.ula-campus-pulse--hero .ula-campus-pulse__stat {
+  background: rgba(255, 255, 255, 0.12);
+  color: rgba(248, 250, 252, 0.92);
+}
+
+.ula-campus-pulse__stream {
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+  max-height: 280px;
+  overflow: hidden;
+  mask-image: linear-gradient(to bottom, #000 75%, transparent 100%);
+}
+
+.ula-campus-pulse--hero .ula-campus-pulse__stream {
+  max-height: 420px;
+}
+
+.ula-campus-pulse__item {
+  display: flex;
+  gap: 0.65rem;
+  align-items: flex-start;
+  border-radius: 14px;
+  padding: 0.65rem 0.75rem;
+  background: rgba(255, 255, 255, 0.72);
+  border: 1px solid rgba(15, 23, 42, 0.05);
+  animation: ula-pulse-item-in 0.45s ease-out both;
+}
+
+.ula-campus-pulse--hero .ula-campus-pulse__item {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+@keyframes ula-pulse-item-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.ula-campus-pulse__avatar {
+  flex-shrink: 0;
+  display: flex;
+  height: 2rem;
+  width: 2rem;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 700;
+  background: rgba(15, 76, 129, 0.12);
+  color: var(--pulse-accent);
+}
+
+.ula-campus-pulse--hero .ula-campus-pulse__avatar {
+  background: rgba(255, 255, 255, 0.15);
+  color: #fff;
+}
+
+.ula-campus-pulse__body {
+  min-width: 0;
+  flex: 1;
+}
+
+.ula-campus-pulse__msg {
+  font-size: 13px;
+  line-height: 1.45;
+  color: #1e293b;
+}
+
+.ula-campus-pulse--hero .ula-campus-pulse__msg {
+  color: rgba(248, 250, 252, 0.95);
+}
+
+.ula-campus-pulse__meta {
+  margin-top: 0.2rem;
+  font-size: 10px;
+  font-weight: 600;
+  color: #94a3b8;
+}
+
+.ula-campus-pulse--hero .ula-campus-pulse__meta {
+  color: rgba(226, 232, 240, 0.75);
+}
+
+.ula-campus-pulse__cta {
+  margin-top: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.ula-campus-pulse__cta-text {
+  font-size: 12px;
+  color: #64748b;
+}
+
+.ula-campus-pulse--hero .ula-campus-pulse__cta-text {
+  color: rgba(226, 232, 240, 0.85);
+}
+
+.ula-auth-shell {
+  min-height: calc(100dvh - var(--ula-nav-h));
+}
+
+.ula-auth-grid {
+  display: grid;
+  min-height: calc(100dvh - var(--ula-nav-h));
+}
+
+@media (min-width: 1024px) {
+  .ula-auth-grid {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  }
+}
+
+.ula-auth-form-panel {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 2rem 1.25rem 3rem;
+}
+
+@media (min-width: 768px) {
+  .ula-auth-form-panel {
+    padding: 3rem 2.5rem 4rem;
+  }
+}
+
+.ula-auth-pulse-panel {
+  display: none;
+  padding: 2rem 2rem 3rem;
+  background: linear-gradient(168deg, #f4f7fb 0%, #e8f0f8 100%);
+  border-left: 1px solid rgba(15, 76, 129, 0.08);
+}
+
+@media (min-width: 1024px) {
+  .ula-auth-pulse-panel {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+}
+
+.ula-auth-farewell {
+  border-radius: 18px;
+  border: 1px solid rgba(16, 185, 129, 0.25);
+  background: linear-gradient(135deg, #ecfdf5 0%, #f0fdf9 100%);
+  padding: 1.15rem 1.25rem;
+  margin-bottom: 1.5rem;
+  animation: ula-pulse-item-in 0.5s ease-out;
+}
+
+.ula-auth-farewell__title {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 15px;
+  font-weight: 600;
+  color: #065f46;
+}
+
+.ula-auth-farewell__text {
+  margin-top: 0.35rem;
+  font-size: 13px;
+  line-height: 1.5;
+  color: #047857;
+}
+
+.ula-auth-trust {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem;
+  margin-top: 1.25rem;
+  justify-content: flex-start;
+}
+
+.ula-auth-trust__chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  border-radius: 999px;
+  padding: 0.3rem 0.7rem;
+  font-size: 11px;
+  font-weight: 600;
+  color: #475569;
+  background: rgba(15, 23, 42, 0.04);
+}

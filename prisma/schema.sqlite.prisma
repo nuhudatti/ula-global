@@ -1,0 +1,484 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Faculty {
+  id             String       @id @default(cuid())
+  institutionId  String       @default("ibbul")
+  institution    Institution  @relation(fields: [institutionId], references: [id], onDelete: Cascade)
+  name           String
+  code           String
+  tagline        String?
+  logoUrl        String?
+  logoPublicId   String?
+  bannerUrl      String?
+  bannerPublicId String?
+  departments         Department[]
+  admins              User[]               @relation("FacultyAdmins")
+  facultyAdminInvites FacultyAdminInvite[]
+  createdAt           DateTime             @default(now())
+  updatedAt           DateTime             @default(now()) @updatedAt
+
+  @@unique([institutionId, code])
+  @@index([institutionId])
+}
+
+model FacultyAdminInvite {
+  id             String   @id @default(cuid())
+  email          String
+  fullName       String
+  facultyId      String
+  invitedById    String
+  token          String   @unique
+  status         String   @default("PENDING")
+  expiresAt      DateTime
+  otpHash        String?
+  otpExpiresAt   DateTime?
+  otpUsedAt      DateTime?
+  acceptedAt     DateTime?
+  createdAt      DateTime @default(now())
+  faculty        Faculty  @relation(fields: [facultyId], references: [id], onDelete: Cascade)
+  invitedBy      User     @relation("FacultyAdminInvitesSent", fields: [invitedById], references: [id])
+
+  @@index([facultyId])
+  @@index([email])
+  @@index([status])
+}
+
+model Department {
+  id           String             @id @default(cuid())
+  name         String
+  facultyId    String
+  tagline      String?
+  logoUrl      String?
+  logoPublicId String?
+  bannerUrl    String?
+  bannerPublicId String?
+  faculty      Faculty            @relation(fields: [facultyId], references: [id], onDelete: Cascade)
+  courses    Course[]
+  users      User[]
+  invites    LecturerInvite[]
+  notices    DepartmentNotice[]
+  createdAt  DateTime           @default(now())
+  updatedAt  DateTime           @default(now()) @updatedAt
+
+  @@unique([facultyId, name])
+}
+
+model Institution {
+  id             String   @id @default(cuid())
+  slug           String   @unique @default("ibbul")
+  name           String
+  shortName      String
+  tagline        String?
+  logoUrl        String?
+  logoPublicId   String?
+  bannerUrl      String?
+  bannerPublicId String?
+  logoPlacement  String   @default("left")
+  primaryColor   String   @default("#14532d")
+  secondaryColor String   @default("#166534")
+  contactEmail   String?
+  website        String?
+  status         String   @default("ACTIVE")
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+  faculties        Faculty[]
+  users            User[]
+  lecturerInvites  LecturerInvite[]
+
+  @@index([status])
+}
+
+// Global platform operators — separate from institution users.
+model PlatformOperator {
+  id            String   @id @default(cuid())
+  email         String   @unique
+  passwordHash  String
+  fullName      String
+  role          String   @default("PLATFORM_SUPER_ADMIN")
+  accountStatus String   @default("ACTIVE")
+  lastActiveAt  DateTime?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  passwordResets PlatformPasswordResetToken[]
+}
+
+// Platform operator password recovery — mirrors institution PasswordResetToken.
+model PlatformPasswordResetToken {
+  id         String           @id @default(cuid())
+  operatorId String
+  tokenHash  String           @unique
+  expiresAt  DateTime
+  usedAt     DateTime?
+  createdAt  DateTime         @default(now())
+  operator   PlatformOperator @relation(fields: [operatorId], references: [id], onDelete: Cascade)
+
+  @@index([operatorId])
+}
+
+// Centralized platform email configuration (singleton — not tied to user accounts).
+model PlatformEmailSettings {
+  id            String   @id @default("default")
+  smtpHost      String?
+  smtpPort      Int      @default(587)
+  smtpSecure    Boolean  @default(false)
+  smtpUser      String?
+  smtpPass      String?
+  smtpFrom      String?
+  smtpFromName  String?  @default("ULA Platform")
+  smtpReplyTo   String?
+  appPublicUrl  String?
+  retryMax      Int      @default(3)
+  retryDelayMs  Int      @default(1000)
+  devOutbox     Boolean  @default(true)
+  mirrorOutbox  Boolean  @default(true)
+  templatesJson String?
+  updatedById   String?
+  updatedAt     DateTime @updatedAt
+  createdAt     DateTime @default(now())
+}
+
+model Course {
+  id           String                    @id @default(cuid())
+  code         String
+  title        String
+  level        Int?
+  semester     String?
+  departmentId String
+  department   Department                @relation(fields: [departmentId], references: [id], onDelete: Cascade)
+  resources    Resource[]
+  assignments  LecturerCourseAssignment[]
+  assignmentPosts Assignment[]           @relation("CourseAssignmentPosts")
+  suggestions  MaterialSuggestion[]
+  discussions  CourseDiscussion[]
+  createdAt    DateTime                  @default(now())
+
+  @@unique([departmentId, code])
+}
+
+// Lightweight academic Q&A — course-scoped, not a social network.
+model CourseDiscussion {
+  id        String   @id @default(cuid())
+  courseId  String
+  authorId  String
+  parentId  String?
+  topic     String   @default("GENERAL")
+  body      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  course    Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  author    User     @relation("DiscussionPosts", fields: [authorId], references: [id], onDelete: Cascade)
+  parent    CourseDiscussion?  @relation("DiscussionReplies", fields: [parentId], references: [id], onDelete: Cascade)
+  replies   CourseDiscussion[] @relation("DiscussionReplies")
+
+  @@index([courseId, createdAt])
+  @@index([parentId])
+  @@index([authorId])
+}
+
+// Lecturer explicitly allows a registered student to submit materials for review.
+model SuggestPermission {
+  id           String   @id @default(cuid())
+  lecturerId   String
+  studentId    String
+  departmentId String
+  note         String?
+  createdAt    DateTime @default(now())
+  lecturer     User     @relation("LecturerSuggestGrants", fields: [lecturerId], references: [id], onDelete: Cascade)
+  student      User     @relation("StudentSuggestGrants", fields: [studentId], references: [id], onDelete: Cascade)
+  suggestions  MaterialSuggestion[]
+
+  @@unique([lecturerId, studentId])
+  @@index([studentId])
+  @@index([lecturerId])
+  @@index([departmentId])
+}
+
+// Student submission — not public until lecturer approves and publishes under lecturer name.
+model MaterialSuggestion {
+  id                 String   @id @default(cuid())
+  permissionId       String
+  studentId          String
+  lecturerId         String
+  courseId           String
+  title              String
+  reason             String
+  kind               String   @default("OTHER")
+  examYear           Int?
+  status             String   @default("PENDING")
+  rejectReason       String?
+  fileUrl            String
+  cloudinaryPublicId String?
+  originalFileName   String
+  mimeType           String?
+  sizeBytes          Int?
+  reviewedAt         DateTime?
+  publishedResourceId String? @unique
+  createdAt          DateTime @default(now())
+  permission         SuggestPermission @relation(fields: [permissionId], references: [id], onDelete: Cascade)
+  student            User     @relation("StudentSuggestions", fields: [studentId], references: [id], onDelete: Cascade)
+  lecturer           User     @relation("LecturerSuggestions", fields: [lecturerId], references: [id], onDelete: Cascade)
+  course             Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  publishedResource  Resource? @relation("SuggestionPublished", fields: [publishedResourceId], references: [id])
+
+  @@index([lecturerId, status])
+  @@index([studentId, status])
+  @@index([permissionId])
+}
+
+model User {
+  id             String                    @id @default(cuid())
+  institutionId  String                    @default("ibbul")
+  institution    Institution               @relation(fields: [institutionId], references: [id], onDelete: Cascade)
+  email          String
+  passwordHash   String
+  fullName       String
+  matricNumber   String?
+  role           String                    @default("STUDENT")
+  departmentId   String?
+  facultyId      String?
+  staffId        String?
+  accountStatus  String                    @default("ACTIVE")
+  departmentRole String?
+  canUpload      Boolean                   @default(true)
+  bio            String?
+  profilePhotoUrl String?
+  profilePhotoPublicId String?
+  bannerUrl      String?
+  bannerPublicId String?
+  lastActiveAt   DateTime?
+  mustChangePassword Boolean               @default(false)
+  passwordChangedAt  DateTime?
+  passwordResets     PasswordResetToken[]
+  department     Department?               @relation(fields: [departmentId], references: [id])
+  faculty        Faculty?                  @relation("FacultyAdmins", fields: [facultyId], references: [id])
+  uploads        Resource[]                @relation("UploaderResources")
+  contributedResources Resource[]          @relation("ContributedResources")
+  ratings        Rating[]
+  courseAssignments LecturerCourseAssignment[]
+  invitesSent    LecturerInvite[]          @relation("InvitesSent")
+  facultyAdminInvitesSent FacultyAdminInvite[] @relation("FacultyAdminInvitesSent")
+  noticesCreated DepartmentNotice[]        @relation("NoticesCreated")
+  suggestGrantsGiven   SuggestPermission[] @relation("LecturerSuggestGrants")
+  suggestGrantsReceived SuggestPermission[] @relation("StudentSuggestGrants")
+  suggestionsSubmitted MaterialSuggestion[] @relation("StudentSuggestions")
+  suggestionsReviewed  MaterialSuggestion[] @relation("LecturerSuggestions")
+  discussionPosts      CourseDiscussion[]   @relation("DiscussionPosts")
+  assignmentsCreated   Assignment[]         @relation("LecturerAssignments")
+  assignmentSubmissions AssignmentSubmission[] @relation("StudentSubmissions")
+  createdAt      DateTime                  @default(now())
+  updatedAt      DateTime                  @updatedAt
+
+  @@unique([institutionId, email])
+  @@unique([institutionId, matricNumber])
+  @@index([institutionId])
+  @@index([role])
+}
+
+// Coursework assignment posted by a lecturer — assignments only (no projects/seminars).
+model Assignment {
+  id           String   @id @default(cuid())
+  courseId     String
+  lecturerId   String
+  title        String
+  description  String?
+  instructions String?
+  dueAt        DateTime
+  allowedTypes String   @default("pdf,docx,pptx,zip,png,jpg")
+  attachmentUrl              String?
+  attachmentName               String?
+  attachmentStoredName         String? // legacy — new uploads use Cloudinary only
+  attachmentCloudinaryPublicId String?
+  status       String   @default("OPEN") // OPEN | CLOSED
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  course       Course   @relation("CourseAssignmentPosts", fields: [courseId], references: [id], onDelete: Cascade)
+  lecturer     User     @relation("LecturerAssignments", fields: [lecturerId], references: [id], onDelete: Cascade)
+  submissions  AssignmentSubmission[]
+
+  @@index([courseId, dueAt])
+  @@index([lecturerId, createdAt])
+  @@index([status])
+}
+
+// One submission per student per assignment. Identity always from session.
+model AssignmentSubmission {
+  id               String   @id @default(cuid())
+  assignmentId     String
+  studentId        String
+  fileUrl          String
+  storedName       String?
+  cloudinaryPublicId String?
+  originalFileName String
+  mimeType         String?
+  sizeBytes        Int?
+  status           String   @default("SUBMITTED") // SUBMITTED | LATE
+  submittedAt      DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+  assignment       Assignment @relation(fields: [assignmentId], references: [id], onDelete: Cascade)
+  student          User       @relation("StudentSubmissions", fields: [studentId], references: [id], onDelete: Cascade)
+
+  @@unique([assignmentId, studentId])
+  @@index([assignmentId, submittedAt])
+  @@index([studentId])
+}
+
+model LecturerCourseAssignment {
+  id        String   @id @default(cuid())
+  userId    String
+  courseId  String
+  semester  String?
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  course    Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+
+  @@unique([userId, courseId])
+  @@index([courseId])
+}
+
+model LecturerInvite {
+  id             String    @id @default(cuid())
+  institutionId  String?
+  email          String
+  fullName       String
+  staffId        String?
+  departmentRole String    @default("LECTURER")
+  departmentId   String?
+  invitedById    String?
+  token          String    @unique
+  status         String    @default("PENDING")
+  canUpload      Boolean   @default(true)
+  courseIdsJson  String?
+  resentCount    Int       @default(0)
+  expiresAt      DateTime
+  acceptedAt     DateTime?
+  createdAt      DateTime  @default(now())
+  institution    Institution? @relation(fields: [institutionId], references: [id], onDelete: Cascade)
+  department     Department?  @relation(fields: [departmentId], references: [id], onDelete: Cascade)
+  invitedBy      User?        @relation("InvitesSent", fields: [invitedById], references: [id])
+
+  @@index([departmentId])
+  @@index([institutionId])
+  @@index([email])
+  @@index([status])
+  @@index([departmentRole])
+}
+
+model PasswordResetToken {
+  id        String   @id @default(cuid())
+  userId    String
+  tokenHash String   @unique
+  expiresAt DateTime
+  usedAt    DateTime?
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+model DepartmentNotice {
+  id           String   @id @default(cuid())
+  departmentId String
+  title        String
+  body         String
+  createdById  String
+  createdAt    DateTime @default(now())
+  department   Department @relation(fields: [departmentId], references: [id], onDelete: Cascade)
+  createdBy    User       @relation("NoticesCreated", fields: [createdById], references: [id])
+
+  @@index([departmentId])
+}
+
+model Resource {
+  id                 String    @id @default(cuid())
+  title              String
+  description        String?
+  kind               String    @default("OTHER")
+  examYear           Int?
+  governanceStatus   String    @default("VERIFIED")
+  sourceType         String    @default("LECTURER")
+  semester           String?
+  fileUrl            String
+  cloudinaryPublicId String?
+  originalFileName   String
+  mimeType           String?
+  sizeBytes          Int?
+  downloadCount      Int       @default(0)
+  avgRating          Float     @default(0) @map("averageRating")
+  ratingCount        Int       @default(0)
+  courseId           String
+  course             Course    @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  uploadedById       String
+  uploadedBy         User      @relation("UploaderResources", fields: [uploadedById], references: [id])
+  contributedById    String?
+  contributedBy      User?     @relation("ContributedResources", fields: [contributedById], references: [id])
+  suggestionId       String?   @unique
+  suggestion         MaterialSuggestion? @relation("SuggestionPublished")
+  ratings            Rating[]
+  createdAt          DateTime  @default(now())
+  updatedAt          DateTime  @updatedAt
+
+  @@index([courseId])
+  @@index([contributedById])
+  @@index([createdAt])
+  @@index([examYear])
+  @@index([governanceStatus])
+}
+
+model Rating {
+  id         String   @id @default(cuid())
+  userId     String
+  resourceId String
+  value      Int      @map("stars")
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  resource   Resource @relation(fields: [resourceId], references: [id], onDelete: Cascade)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@unique([userId, resourceId])
+  @@index([resourceId])
+  @@index([userId])
+  @@map("ResourceRating")
+}
+
+model Backup {
+  id               String    @id @default(cuid())
+  fileUrl          String
+  publicId         String
+  size             Int?
+  version          String    @default("1")
+  status           String    @default("COMPLETED")
+  trigger          String    @default("manual")
+  engine           String    @default("sqlite")
+  actorId          String?
+  checksum         String?
+  offsiteCopied    Boolean   @default(false)
+  offsitePath      String?
+  validatedAt      DateTime?
+  validationOk     Boolean?
+  integrityChecked Boolean   @default(false)
+  createdAt        DateTime  @default(now())
+
+  @@index([createdAt])
+  @@index([status])
+}
+
+model SystemAuditLog {
+  id            String   @id @default(cuid())
+  action        String
+  actorId       String?
+  actorType     String   @default("user")
+  institutionId String?
+  detail        String?
+  createdAt     DateTime @default(now())
+
+  @@index([action])
+  @@index([createdAt])
+  @@index([institutionId])
+}

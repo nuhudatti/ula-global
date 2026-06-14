@@ -1,0 +1,73 @@
+.ula-identity-root {
+  max-width: 56rem;
+}
+
+.ula-identity-hero {
+  position: relative;
+  overflow: hidden;
+  border-radius: 1.25rem;
+  border: 1px solid rgb(226 232 240 / 0.9);
+  background: linear-gradient(135deg, #f8fafc 0%, #eff6ff 50%, #f1f5f9 100%);
+}
+
+.ula-identity-hero-banner {
+  height: 7rem;
+  background: linear-gradient(120deg, #0f4c81 0%, #1e3a5f 55%, #334155 100%);
+  background-size: cover;
+  background-position: center;
+}
+
+.ula-identity-tab {
+  border-radius: 9999px;
+  padding: 0.45rem 1rem;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: #64748b;
+  transition: background 0.15s, color 0.15s;
+}
+
+.ula-identity-tab[data-active='true'] {
+  background: #0f4c81;
+  color: #fff;
+}
+
+.ula-identity-card {
+  border-radius: 1rem;
+  border: 1px solid rgb(226 232 240 / 0.85);
+  background: rgba(255, 255, 255, 0.95);
+  box-shadow: 0 1px 2px rgb(15 23 42 / 0.04);
+}
+
+.ula-identity-drop {
+  border: 2px dashed rgb(203 213 225);
+  border-radius: 0.875rem;
+  padding: 1.5rem;
+  text-align: center;
+  transition: border-color 0.15s, background 0.15s;
+  cursor: pointer;
+}
+
+.ula-identity-drop[data-active='true'] {
+  border-color: #0f4c81;
+  background: rgb(15 76 129 / 0.04);
+}
+
+.ula-identity-preview {
+  border-radius: 0.75rem;
+  overflow: hidden;
+  border: 1px solid rgb(226 232 240);
+  background: #f8fafc;
+}
+
+.ula-identity-success {
+  animation: ula-identity-flash 0.6s ease;
+}
+
+@keyframes ula-identity-flash {
+  0% {
+    box-shadow: 0 0 0 0 rgb(16 185 129 / 0.4);
+  }
+  100% {
+    box-shadow: 0 0 0 12px rgb(16 185 129 / 0);
+  }
+}

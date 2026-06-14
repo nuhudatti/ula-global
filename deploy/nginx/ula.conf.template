@@ -1,0 +1,67 @@
+# ULA Global Platform — Nginx reverse proxy with Let's Encrypt TLS
+# Replace __ULA_DOMAIN__ with your production hostname (e.g. ula.ibbul.edu.ng)
+#
+# Install: see deploy/scripts/install-nginx.sh and deploy/HTTPS.md
+
+# ─── HTTP → HTTPS (permanent) ───────────────────────────────────────────────
+server {
+    listen 80;
+    listen [::]:80;
+    server_name __ULA_DOMAIN__;
+
+    # Let's Encrypt HTTP-01 challenge (certbot)
+    location /.well-known/acme-challenge/ {
+        root /var/www/certbot;
+    }
+
+    location / {
+        return 301 https://$host$request_uri;
+    }
+}
+
+# ─── HTTPS ──────────────────────────────────────────────────────────────────
+server {
+    listen 443 ssl http2;
+    listen [::]:443 ssl http2;
+    server_name __ULA_DOMAIN__;
+
+    # Certbot fills these paths after: certbot --nginx -d __ULA_DOMAIN__
+    ssl_certificate     /etc/letsencrypt/live/__ULA_DOMAIN__/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/__ULA_DOMAIN__/privkey.pem;
+    include /etc/nginx/snippets/ula-ssl-params.conf;
+
+    # Security headers (HSTS, CSP, etc.)
+    include /etc/nginx/snippets/ula-security-headers.conf;
+
+    # Uploads / assignments (Cloudinary handles files; limit protects API abuse)
+    client_max_body_size 45M;
+
+    access_log /var/log/nginx/ula-access.log;
+    error_log  /var/log/nginx/ula-error.log;
+
+    # ─── Auth endpoints — stricter rate limit ───────────────────────────────
+    location ~ ^/api/(auth/login|auth/forgot-password|auth/register|platform/auth/login|platform/auth/forgot-password)$ {
+        limit_req zone=ula_auth burst=5 nodelay;
+        limit_req_status 429;
+
+        proxy_pass http://127.0.0.1:4000;
+        include /etc/nginx/snippets/ula-proxy.conf;
+    }
+
+    # ─── API ──────────────────────────────────────────────────────────────
+    location /api/ {
+        limit_req zone=ula_api burst=40 nodelay;
+        limit_req_status 429;
+
+        proxy_pass http://127.0.0.1:4000;
+        include /etc/nginx/snippets/ula-proxy.conf;
+    }
+
+    # ─── SPA + tenant routes + platform routes ────────────────────────────
+    # /, /ibbul, /platform, /platform/login, forgot-password, reset-password,
+    # accept-invitation, etc. — all served by Express (web/dist) in production.
+    location / {
+        proxy_pass http://127.0.0.1:4000;
+        include /etc/nginx/snippets/ula-proxy.conf;
+    }
+}
