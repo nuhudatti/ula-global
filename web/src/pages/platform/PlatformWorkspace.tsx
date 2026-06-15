@@ -46,7 +46,7 @@ export function PlatformWorkspace() {
   }
 
   return (
-    <div className="ula-platform-root flex min-h-dvh">
+    <div className="ula-platform-root flex min-h-dvh w-full max-w-[100vw] overflow-x-hidden">
       <aside className="ula-platform-sidebar flex shrink-0 flex-col p-4">
         <div className="mb-6">
           <p className="text-[10px] font-bold uppercase tracking-[0.16em] text-slate-400">ULA Global</p>
@@ -74,25 +74,13 @@ export function PlatformWorkspace() {
         </div>
       </aside>
 
-      <main className="min-w-0 flex-1 overflow-y-auto p-6 md:p-8">
-        <div className={section === 'overview' ? '' : 'hidden'}>
-          <PlatformDashboard />
-        </div>
-        <div className={section === 'tenants' ? '' : 'hidden'}>
-          <TenantManagement />
-        </div>
-        <div className={section === 'backup' ? '' : 'hidden'}>
-          <BackupManagement />
-        </div>
-        <div className={section === 'monitoring' ? '' : 'hidden'}>
-          <PlatformMonitoring />
-        </div>
-        <div className={section === 'settings' ? '' : 'hidden'}>
-          <PlatformSettings />
-        </div>
-        <div className={section === 'audit' ? '' : 'hidden'}>
-          <PlatformAuditLog />
-        </div>
+      <main className="min-w-0 w-full flex-1 overflow-x-hidden overflow-y-auto p-4 sm:p-6 md:p-8">
+        {section === 'overview' ? <PlatformDashboard /> : null}
+        {section === 'tenants' ? <TenantManagement /> : null}
+        {section === 'backup' ? <BackupManagement /> : null}
+        {section === 'monitoring' ? <PlatformMonitoring /> : null}
+        {section === 'settings' ? <PlatformSettings /> : null}
+        {section === 'audit' ? <PlatformAuditLog /> : null}
       </main>
     </div>
   );

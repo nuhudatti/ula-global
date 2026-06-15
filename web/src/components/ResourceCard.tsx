@@ -88,13 +88,15 @@ export function ResourceCard({ r, onDownload, onRated }: Props) {
   const [busy, setBusy] = useState(false);
   const [downloadPhase, setDownloadPhase] = useState<DownloadPhase>('idle');
   const [downloadProgress, setDownloadProgress] = useState(0);
+  const [localDownloads, setLocalDownloads] = useState(r.downloadCount);
   const resetTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
     setAvg(r.avgRating);
     setCount(r.ratingCount);
     setMine(r.userRating);
-  }, [r.id, r.avgRating, r.ratingCount, r.userRating]);
+    setLocalDownloads(r.downloadCount);
+  }, [r.id, r.avgRating, r.ratingCount, r.userRating, r.downloadCount]);
 
   useEffect(() => {
     return () => {
@@ -136,6 +138,7 @@ export function ResourceCard({ r, onDownload, onRated }: Props) {
         setDownloadPhase(phase);
         if (pct != null) setDownloadProgress(pct);
       });
+      setLocalDownloads((n) => n + 1);
       resetTimerRef.current = setTimeout(() => {
         setDownloadPhase('idle');
         setDownloadProgress(0);
@@ -215,7 +218,7 @@ export function ResourceCard({ r, onDownload, onRated }: Props) {
 
       <div className="mb-2 flex flex-wrap items-center justify-between gap-x-3 gap-y-2 text-[13px] text-dark-500">
         <span className="tabular-nums">
-          <span className="font-medium text-dark-800">{r.downloadCount.toLocaleString()}</span>
+          <span className="font-medium text-dark-800">{localDownloads.toLocaleString()}</span>
           <span className="text-dark-400"> downloads</span>
         </span>
         {count > 0 && displayAvg != null ? (

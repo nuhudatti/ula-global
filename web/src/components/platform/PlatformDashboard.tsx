@@ -163,7 +163,7 @@ export function PlatformDashboard() {
   const backup = overview?.backupHealth;
 
   return (
-    <div className="max-w-6xl space-y-6">
+    <div className="max-w-6xl w-full min-w-0 space-y-6">
       <header>
         <p className="text-[11px] font-semibold uppercase tracking-[0.12em] text-slate-500">Operations</p>
         <h2 className="mt-1 text-2xl font-semibold text-slate-900">Analytics &amp; audit overview</h2>

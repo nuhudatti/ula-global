@@ -6,8 +6,8 @@ body {
 }
 
 .ula-shell-nav {
-  position: relative;
   height: var(--ula-nav-h);
+  min-height: var(--ula-nav-h);
   border-bottom: 1px solid var(--ula-border);
   background: linear-gradient(180deg, rgba(255, 255, 255, 0.97) 0%, rgba(244, 249, 246, 0.94) 100%);
   backdrop-filter: saturate(180%) blur(12px);

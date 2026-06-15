@@ -27,7 +27,6 @@ export function LoginPage() {
   const [error, setError] = useState('');
   const [pending, setPending] = useState(false);
   const [farewell, setFarewell] = useState<{ firstName: string } | null>(null);
-  const [showDemo, setShowDemo] = useState(false);
 
   useEffect(() => {
     if (signedOut) {
@@ -147,19 +146,13 @@ export function LoginPage() {
           </Link>
         </p>
 
-        <button
-          type="button"
-          className="mx-auto mt-6 block text-xs font-medium text-dark-400 hover:text-dark-600"
-          onClick={() => setShowDemo((v) => !v)}
+        <Link
+          to={paths.home}
+          className="mt-6 flex w-full items-center justify-center gap-2 rounded-xl border border-dark-200 bg-white py-3 text-sm font-semibold text-dark-700 shadow-sm transition hover:border-dark-300 hover:bg-dark-50"
         >
-          {showDemo ? 'Hide' : 'Show'} demo accounts
-        </button>
-        {showDemo ? (
-          <p className="mt-2 text-center text-xs leading-relaxed text-dark-500">
-            Student <code className="rounded bg-dark-100 px-1">student@demo.ibbul.edu</code> · Lecturer{' '}
-            <code className="rounded bg-dark-100 px-1">lecturer@demo.ibbul.edu</code> · Passwords end with Demo123!
-          </p>
-        ) : null}
+          <i className="fa-solid fa-arrow-left text-[12px]" aria-hidden />
+          Back to browse materials
+        </Link>
       </div>
     </div>
   );

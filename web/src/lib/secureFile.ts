@@ -81,8 +81,42 @@ function parseFilenameFromDisposition(header: string | null): string | null {
   return null;
 }
 
-function triggerBlobDownload(blob: Blob, fileName: string) {
+function isMobileDevice() {
+  return /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent);
+}
+
+async function tryMobileFileShare(blob: Blob, fileName: string): Promise<boolean> {
+  if (!navigator.share || typeof File === 'undefined') return false;
+  try {
+    const file = new File([blob], fileName, { type: blob.type || 'application/octet-stream' });
+    if (!navigator.canShare?.({ files: [file] })) return false;
+    await navigator.share({ files: [file], title: fileName });
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+async function triggerBlobDownload(blob: Blob, fileName: string): Promise<void> {
   const url = URL.createObjectURL(blob);
+
+  if (isMobileDevice()) {
+    const shared = await tryMobileFileShare(blob, fileName);
+    if (!shared) {
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = fileName;
+      a.rel = 'noopener';
+      a.target = '_blank';
+      a.style.display = 'none';
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+    }
+    window.setTimeout(() => URL.revokeObjectURL(url), 60_000);
+    return;
+  }
+
   const a = document.createElement('a');
   a.href = url;
   a.download = fileName;
@@ -146,7 +180,7 @@ export async function downloadSecureStream(
 
   onPhase?.('saving', total > 0 ? 100 : undefined);
   const blob = new Blob(chunks, { type: res.headers.get('Content-Type') || 'application/octet-stream' });
-  triggerBlobDownload(blob, fileName);
+  await triggerBlobDownload(blob, fileName);
   onPhase?.('done', 100);
 }
 

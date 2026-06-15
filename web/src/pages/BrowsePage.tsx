@@ -148,7 +148,6 @@ export function BrowsePage() {
       setTotal(res.total);
     } catch (e) {
       console.error(e);
-      setItems([]);
     } finally {
       setLoading(false);
     }
@@ -259,7 +258,9 @@ export function BrowsePage() {
     onPhase?: (phase: DownloadPhase, progressPercent?: number) => void,
   ) {
     await downloadResourceFile(id, fileName, onPhase);
-    void loadResources();
+    setItems((prev) =>
+      prev.map((r) => (r.id === id ? { ...r, downloadCount: r.downloadCount + 1 } : r)),
+    );
   }
 
   const inputCls =
@@ -276,7 +277,7 @@ export function BrowsePage() {
 
   return (
     <main
-      className="relative mx-auto max-w-[var(--ula-max-width)] px-5 pb-16 pt-10 md:px-8 md:pb-20 md:pt-12 lg:px-10"
+      className="relative mx-auto w-full min-w-0 max-w-[var(--ula-max-width)] overflow-x-hidden px-5 pb-16 pt-10 md:px-8 md:pb-20 md:pt-12 lg:px-10"
       aria-busy={loading}
     >
       <div className="pointer-events-none absolute inset-x-0 top-0 -z-10 h-[320px] ula-ambient-page" aria-hidden />
