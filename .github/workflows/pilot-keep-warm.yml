@@ -1,0 +1,31 @@
+# Keeps Render free tier warm during ULA pilot (backup to UptimeRobot).
+# Requires GitHub secret: ULA_PING_URL = https://YOUR-LIVE-URL/api/health/ping
+name: Pilot keep-warm
+
+on:
+  schedule:
+    # Every 9 minutes — under Render's ~15 min sleep window (with UptimeRobot at 5 min)
+    - cron: '*/9 * * * *'
+  workflow_dispatch:
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - name: Ping ULA health endpoint
+        env:
+          ULA_PING_URL: ${{ secrets.ULA_PING_URL }}
+        run: |
+          if [ -z "$ULA_PING_URL" ]; then
+            echo "Skip: set repository secret ULA_PING_URL to https://YOUR-URL/api/health/ping"
+            exit 0
+          fi
+          echo "Pinging $ULA_PING_URL"
+          body="$(curl -fsS --max-time 90 --retry 2 --retry-delay 5 "$ULA_PING_URL")"
+          echo "$body" | grep -q '"ping":"pong"' || {
+            echo "FAIL: response missing ULA ping keyword (wrong URL or stale deploy)"
+            echo "Body: $body"
+            exit 1
+          }
+          echo "OK — service warm ($(echo "$body" | head -c 120))"

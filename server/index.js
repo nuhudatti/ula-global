@@ -67,6 +67,17 @@ if (isProd) {
 const app = express();
 configureTrustProxy(app);
 
+/** Lightweight keep-warm target for UptimeRobot / Render (no DB, auth, or heavy checks). */
+function handleHealthPing(_req, res) {
+  res.set('Cache-Control', 'no-store, no-cache, must-revalidate');
+  res.status(200).json({ ok: true, ping: 'pong', ts: Date.now() });
+}
+app.get('/api/health/ping', handleHealthPing);
+app.head('/api/health/ping', (_req, res) => {
+  res.set('Cache-Control', 'no-store, no-cache, must-revalidate');
+  res.status(200).end();
+});
+
 const clientOrigin = getClientOrigin();
 const corsOrigins = clientOrigin.includes(',')
   ? clientOrigin.split(',').map((s) => s.trim())
@@ -95,6 +106,7 @@ app.get('/api/health', (req, res) => {
   res.json({
     ok: true,
     service: 'ibbul-ula',
+    ping: '/api/health/ping',
     ts: new Date().toISOString(),
     nodeEnv: process.env.NODE_ENV || 'development',
     tls: {
@@ -144,7 +156,10 @@ if (isProd && fs.existsSync(indexHtml)) {
 }
 
 const PORT = Number(process.env.PORT) || 4000;
-const HOST = process.env.HOST || (isProd ? '127.0.0.1' : '0.0.0.0');
+/** Render/Railway set PORT — must bind 0.0.0.0. VPS behind nginx uses HOST=127.0.0.1. */
+const HOST =
+  process.env.HOST ||
+  (process.env.PORT ? '0.0.0.0' : isProd ? '127.0.0.1' : '0.0.0.0');
 app.listen(PORT, HOST, async () => {
   try {
     await bootstrapTenants();
@@ -153,7 +168,11 @@ app.listen(PORT, HOST, async () => {
   }
   console.log(`[ibbul-ula] API listening on ${HOST}:${PORT}`);
   if (isProd) {
-    console.log(`[ibbul-ula] HTTPS public URL: ${getUrlSecurityStatus().appPublicUrl}`);
+    const { appPublicUrl } = getUrlSecurityStatus();
+    console.log(`[ibbul-ula] HTTPS public URL: ${appPublicUrl}`);
+    if (appPublicUrl) {
+      console.log(`[ibbul-ula] UptimeRobot keep-warm: ${appPublicUrl}/api/health/ping`);
+    }
   }
   if (isProd && fs.existsSync(indexHtml)) {
     console.log('[ibbul-ula] Serving SPA from web/dist');

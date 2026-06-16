@@ -203,12 +203,6 @@ export async function createDiscussionPost({ userId, userRole, courseId, parentI
   const safeTopic = TOPICS.has(topic) ? topic : 'GENERAL';
   let resolvedCourseId = courseId || null;
 
-  if (!parentId && STAFF_ROLES.has(userRole)) {
-    const err = new Error('Lecturers can only reply to student questions on tagged courses');
-    err.status = 403;
-    throw err;
-  }
-
   if (parentId) {
     const parent = await prisma.courseDiscussion.findUnique({
       where: { id: parentId },
@@ -233,17 +227,40 @@ export async function createDiscussionPost({ userId, userRole, courseId, parentI
     resolvedCourseId = parent.courseId;
   } else if (userRole === 'STUDENT') {
     if (!resolvedCourseId) {
-      const err = new Error('Tag a course so your lecturer can see your question');
+      resolvedCourseId = await resolveDefaultCourseId(userId, null);
+    } else {
+      const course = await prisma.course.findUnique({
+        where: { id: resolvedCourseId },
+        select: { id: true },
+      });
+      if (!course) {
+        const err = new Error('Course not found');
+        err.status = 404;
+        throw err;
+      }
+    }
+  } else if (STAFF_ROLES.has(userRole)) {
+    if (!resolvedCourseId) {
+      const err = new Error('Pick a course to broadcast your message to students');
       err.status = 400;
       throw err;
     }
     const course = await prisma.course.findUnique({
       where: { id: resolvedCourseId },
-      select: { id: true },
+      select: { id: true, departmentId: true },
     });
     if (!course) {
       const err = new Error('Course not found');
       err.status = 404;
+      throw err;
+    }
+    const staff = await prisma.user.findUnique({
+      where: { id: userId },
+      select: { departmentId: true },
+    });
+    if (!staff?.departmentId || course.departmentId !== staff.departmentId) {
+      const err = new Error('You can only post on courses in your department');
+      err.status = 403;
       throw err;
     }
   } else {

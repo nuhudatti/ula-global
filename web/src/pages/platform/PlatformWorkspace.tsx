@@ -46,7 +46,7 @@ export function PlatformWorkspace() {
   }
 
   return (
-    <div className="ula-platform-root flex min-h-dvh w-full max-w-[100vw] overflow-x-hidden">
+    <div className="ula-platform-root flex min-h-dvh w-full max-w-full overflow-x-hidden">
       <aside className="ula-platform-sidebar flex shrink-0 flex-col p-4">
         <div className="mb-6">
           <p className="text-[10px] font-bold uppercase tracking-[0.16em] text-slate-400">ULA Global</p>

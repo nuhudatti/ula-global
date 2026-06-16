@@ -4,6 +4,8 @@ import { resolveImageUrl, withCacheBust } from '../lib/mediaUrl';
 type Props = {
   name: string;
   imageUrl?: string | null;
+  /** Bust browser cache when profile updates (user id, timestamp, upload counter). */
+  cacheKey?: string | number | null;
   size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl';
   className?: string;
   interactive?: boolean;
@@ -29,20 +31,22 @@ function initialsFrom(name: string) {
 export function IdentityAvatar({
   name,
   imageUrl,
+  cacheKey,
   size = 'md',
   className = '',
   interactive = false,
   title,
   priority = false,
 }: Props) {
-  const resolved = withCacheBust(imageUrl, imageUrl ?? '') || resolveImageUrl(imageUrl);
+  const bust = cacheKey ?? imageUrl ?? name;
+  const resolved = withCacheBust(imageUrl, bust) || resolveImageUrl(imageUrl);
   const [failed, setFailed] = useState(false);
   const [loaded, setLoaded] = useState(false);
 
   useEffect(() => {
     setFailed(false);
     setLoaded(false);
-  }, [imageUrl]);
+  }, [imageUrl, bust]);
 
   const cls = sizes[size];
   const initial = initialsFrom(name);

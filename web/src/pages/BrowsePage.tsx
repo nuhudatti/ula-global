@@ -264,7 +264,7 @@ export function BrowsePage() {
   }
 
   const inputCls =
-    'w-full rounded-2xl border-0 bg-white py-3 px-4 text-[15px] text-dark-900 shadow-none ring-1 ring-dark-200/75 transition placeholder:text-dark-400 focus:ring-2 focus:ring-primary-600/25';
+    'w-full rounded-2xl border-0 bg-white py-3 px-4 text-base text-dark-900 shadow-none ring-1 ring-dark-200/75 transition placeholder:text-dark-400 focus:ring-2 focus:ring-inset focus:ring-primary-600/25';
 
   const labelCls = 'mb-1.5 flex items-center gap-2 text-[13px] font-semibold text-dark-800';
 

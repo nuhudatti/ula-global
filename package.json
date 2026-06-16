@@ -24,6 +24,7 @@
     "email:verify": "node scripts/test-email.js --verify",
     "email:test": "node scripts/test-email.js --send",
     "verify:https": "node scripts/verify-https-deployment.js",
+    "uptime:check": "node scripts/check-uptime-endpoint.js",
     "jwt:generate": "node scripts/generate-jwt-secrets.js"
   },
   "prisma": {

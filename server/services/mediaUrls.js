@@ -12,6 +12,19 @@ export function normalizeStoredMediaUrl(url) {
   return trimmed;
 }
 
+/** Resolve relative media paths to absolute HTTPS URLs for clients and email. */
+export function absolutizePublicMediaUrl(url, baseUrl = '') {
+  const normalized = normalizeStoredMediaUrl(url);
+  if (!normalized) return null;
+  if (/^https?:\/\//i.test(normalized)) {
+    return normalized.startsWith('http://') ? `https://${normalized.slice(7)}` : normalized;
+  }
+  if (normalized.startsWith('/') && baseUrl) {
+    return `${String(baseUrl).replace(/\/$/, '')}${normalized}`;
+  }
+  return normalized;
+}
+
 export function normalizeMediaFields(row, fields = ['logoUrl', 'bannerUrl', 'profilePhotoUrl']) {
   if (!row) return row;
   const out = { ...row };

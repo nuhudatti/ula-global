@@ -8,6 +8,7 @@ type Props = {
   name: string;
   subtitle?: string;
   imageUrl?: string | null;
+  imageCacheKey?: string | number | null;
   size?: 'sm' | 'md' | 'lg';
   /** Avatar only — no name row (header corner) */
   compact?: boolean;
@@ -26,6 +27,7 @@ export function UserProfileChip({
   name,
   subtitle,
   imageUrl,
+  imageCacheKey,
   size = 'sm',
   compact = false,
   onOpenProfile,
@@ -59,6 +61,7 @@ export function UserProfileChip({
     <IdentityAvatar
       name={name}
       imageUrl={imageUrl}
+      cacheKey={imageCacheKey ?? imageUrl}
       size={size}
       interactive
       priority={priority}

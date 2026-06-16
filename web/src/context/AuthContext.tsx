@@ -108,10 +108,19 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     });
     setToken(res.token);
     setUser(res.user);
-    return {
-      user: res.user,
-      mustChangePassword: Boolean(res.mustChangePassword || res.user.mustChangePassword),
-    };
+    try {
+      const me = await api<User>('/api/auth/me');
+      setUser(me);
+      return {
+        user: me,
+        mustChangePassword: Boolean(res.mustChangePassword || me.mustChangePassword),
+      };
+    } catch {
+      return {
+        user: res.user,
+        mustChangePassword: Boolean(res.mustChangePassword || res.user.mustChangePassword),
+      };
+    }
   }, []);
 
   const acceptInvite = useCallback(async (inviteToken: string, password: string, otp?: string) => {

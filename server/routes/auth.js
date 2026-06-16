@@ -17,7 +17,8 @@ import {
   acceptFacultyAdminInvite,
   previewFacultyAdminInvite,
 } from '../services/facultyAdminInvites.js';
-import { normalizeStoredMediaUrl } from '../services/mediaUrls.js';
+import { normalizeStoredMediaUrl, absolutizePublicMediaUrl } from '../services/mediaUrls.js';
+import { getPublicBaseUrl } from '../services/publicUrl.js';
 import { loginRateLimit } from '../middleware/rateLimitMiddleware.js';
 import { normalizeSlug, resolveTenantBySlug } from '../services/tenantService.js';
 import { userEmailWhere } from '../services/tenantScope.js';
@@ -96,10 +97,11 @@ const userPublicSelect = {
 
 function mapPublicUser(row) {
   if (!row) return row;
+  const base = getPublicBaseUrl();
   return {
     ...row,
-    profilePhotoUrl: normalizeStoredMediaUrl(row.profilePhotoUrl),
-    bannerUrl: normalizeStoredMediaUrl(row.bannerUrl),
+    profilePhotoUrl: absolutizePublicMediaUrl(row.profilePhotoUrl, base) || normalizeStoredMediaUrl(row.profilePhotoUrl),
+    bannerUrl: absolutizePublicMediaUrl(row.bannerUrl, base) || normalizeStoredMediaUrl(row.bannerUrl),
   };
 }
 

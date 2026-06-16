@@ -50,7 +50,7 @@ function renderInstitutionHeader(branding) {
   const fullName = escapeHtml(branding.name);
   const tagline = escapeHtml(branding.tagline || 'University Learning Archive');
   const logo = branding.logoUrl
-    ? `<img src="${escapeAttr(branding.logoUrl)}" alt="${title} logo" width="52" height="52" style="display:block;border-radius:10px;object-fit:contain;background:#ffffff" />`
+    ? `<img src="${escapeAttr(branding.logoUrl)}" alt="${title} logo" width="52" height="52" border="0" style="display:block;border:0;border-radius:10px;object-fit:contain;background:#ffffff;max-width:52px;height:auto" />`
     : `<div style="width:52px;height:52px;border-radius:10px;background:${primary};color:#fff;font-size:14px;font-weight:700;line-height:52px;text-align:center">${escapeHtml((branding.shortName || 'ULA').slice(0, 2).toUpperCase())}</div>`;
 
   const banner = branding.bannerUrl

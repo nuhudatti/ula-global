@@ -182,3 +182,22 @@ pm2 start deploy/pm2/ecosystem.config.cjs
 ```
 
 See `POSTGRESQL_MIGRATION.md` and `deploy/pm2/ecosystem.config.cjs` for VPS details.
+
+---
+
+## 11. Render free tier — cold start (“Service waking up…”)
+
+Render **free web services spin down after ~15 minutes** with no HTTP traffic. The next visit triggers a cold start (30–90 seconds). This is **Render policy**, not a bug in ULA code.
+
+**Pilot fix (free tier):** Follow **[deploy/UPTIME_PILOT.md](deploy/UPTIME_PILOT.md)** — UptimeRobot pings `/api/health/ping` every **5 minutes**.
+
+Quick setup:
+
+1. Verify: `npm run uptime:check` (set `BASE_URL` or pass your URL as argument)
+2. [UptimeRobot](https://uptimerobot.com) → HTTP monitor → `https://YOUR-URL/api/health/ping`
+3. Interval **5 min**, timeout **60s**, keyword `"ping":"pong"`
+4. Render **Health Check Path** → `/api/health/ping`
+
+**Optional:** GitHub secret `ULA_PING_URL` enables `.github/workflows/pilot-keep-warm.yml` (every 9 min backup).
+
+**Always on (no cold starts):** Render **Starter ($7/mo)**.

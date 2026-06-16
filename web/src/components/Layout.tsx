@@ -63,7 +63,7 @@ export function Layout() {
 
     <>
 
-      <header className="ula-shell-nav fixed top-0 left-0 right-0 z-50 flex h-[var(--ula-nav-h)] min-h-[var(--ula-nav-h)] items-center justify-between gap-4 px-4 md:px-6">
+      <header className="ula-shell-nav fixed top-0 left-0 right-0 z-50 flex h-[var(--ula-nav-h)] min-h-[var(--ula-nav-h)] w-full max-w-full items-center justify-between gap-2 overflow-x-hidden px-4 md:gap-4 md:px-6">
 
         <InstitutionBrand variant="shell" asLink linkTo={paths.home} className="min-w-0 shrink-0" />
 
@@ -244,6 +244,7 @@ export function Layout() {
                   }
 
                   imageUrl={user.profilePhotoUrl}
+                  imageCacheKey={`${user.id}-${user.profilePhotoUrl ?? ''}`}
 
                   compact
 
@@ -303,7 +304,7 @@ export function Layout() {
 
 
 
-      <div className="pt-[var(--ula-nav-h)] min-h-screen bg-[var(--ula-bg)]">
+      <div className="min-h-dvh bg-[var(--ula-bg)] pt-[var(--ula-nav-h)]">
         {showPublicBanner ? <InstitutionPublicBanner variant={publicBannerVariant} /> : null}
         <Outlet />
       </div>

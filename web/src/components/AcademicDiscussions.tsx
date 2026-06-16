@@ -115,10 +115,10 @@ export function AcademicDiscussions({
   const isStudent = user?.role === 'STUDENT';
   const isStaff = isDiscussionStaff(user?.role);
   const canParticipate = isDiscussionParticipant(user?.role);
-  const canCreateThread = isStudent && showCompose;
+  const canCreateThread = (isStudent || isStaff) && showCompose;
   const canReply = canParticipate && showCompose;
   const trimmedLen = body.trim().length;
-  const needsCourse = canCreateThread && !replyTo;
+  const needsCourse = isStaff && canCreateThread && !replyTo;
   const canSubmit =
     trimmedLen >= MIN_POST_LEN && !busy && (!needsCourse || Boolean(courseId));
 
@@ -171,10 +171,12 @@ export function AcademicDiscussions({
   async function onSubmit(e: FormEvent) {
     e.preventDefault();
     if (!canParticipate || !canSubmit) return;
-    if (isStaff && !replyTo) return;
-    if (isStudent && !replyTo && !courseId) {
-      setError('Pick a course so your lecturer can see this question.');
+    if (isStaff && !replyTo && !courseId) {
+      setError('Pick a course to send your message to students.');
       return;
+    }
+    if (isStudent && !replyTo && !courseId) {
+      /* General comment — server assigns department default course */
     }
     setBusy(true);
     setError(null);
@@ -234,8 +236,8 @@ export function AcademicDiscussions({
         <p className="ula-acad-disc__live-hint px-4 pt-2 text-[11px] text-slate-500">
           <i className="fa-solid fa-circle text-[6px] text-emerald-500 mr-1.5" aria-hidden />
           {isStaff
-            ? 'Student questions tagged to your department courses'
-            : 'Students tag a course — lecturers for that course can reply'}
+            ? 'Post to your department courses or reply to students'
+            : 'Drop a comment or tag a course — lecturers can reply'}
         </p>
       )}
 
@@ -275,11 +277,6 @@ export function AcademicDiscussions({
 
       {showCompose ? (
         canParticipate ? (
-          isStaff && !replyTo ? (
-            <div className="ula-acad-disc__compose text-center">
-              <p className="text-sm text-slate-600">Tap <strong>Reply</strong> on a student question to respond.</p>
-            </div>
-          ) : (
           <form className="ula-acad-disc__compose" onSubmit={onSubmit}>
             {replyTo ? (
               <div className="ula-acad-disc__reply-banner mb-2">
@@ -297,26 +294,30 @@ export function AcademicDiscussions({
                   Cancel reply
                 </button>
               </div>
-            ) : isStudent ? (
+            ) : (
               <div className="mb-2 flex flex-wrap items-center gap-2">
+                {isStudent ? (
+                  <select
+                    className="rounded-lg border border-slate-200 px-2 py-1 text-base"
+                    value={topic}
+                    onChange={(e) => setTopic(e.target.value as DiscussionTopic)}
+                  >
+                    {(Object.keys(TOPIC_LABELS) as DiscussionTopic[]).map((t) => (
+                      <option key={t} value={t}>
+                        {TOPIC_LABELS[t]}
+                      </option>
+                    ))}
+                  </select>
+                ) : null}
                 <select
-                  className="rounded-lg border border-slate-200 px-2 py-1 text-xs"
-                  value={topic}
-                  onChange={(e) => setTopic(e.target.value as DiscussionTopic)}
-                >
-                  {(Object.keys(TOPIC_LABELS) as DiscussionTopic[]).map((t) => (
-                    <option key={t} value={t}>
-                      {TOPIC_LABELS[t]}
-                    </option>
-                  ))}
-                </select>
-                <select
-                  className="rounded-lg border border-slate-200 px-2 py-1 text-xs"
+                  className="rounded-lg border border-slate-200 px-2 py-1 text-base"
                   value={courseId}
                   onChange={(e) => setCourseId(e.target.value)}
-                  required
+                  required={isStaff}
                 >
-                  <option value="">Select course (required)</option>
+                  <option value="">
+                    {isStudent ? 'General comment (optional course)' : 'Select course (required)'}
+                  </option>
                   {courses.map((c) => (
                     <option key={c.id} value={c.id}>
                       {c.code} — {c.title}
@@ -324,7 +325,7 @@ export function AcademicDiscussions({
                   ))}
                 </select>
               </div>
-            ) : null}
+            )}
             {error ? <p className="mb-2 text-xs text-red-600">{error}</p> : null}
             <textarea
               ref={composeRef}
@@ -333,7 +334,9 @@ export function AcademicDiscussions({
               placeholder={
                 replyTo
                   ? `Reply to ${replyTo.author.fullName.split(' ')[0]}…`
-                  : 'Ask your lecturer about this course…'
+                  : isStaff
+                    ? 'Message your students about this course…'
+                    : 'Share a comment or ask your lecturer…'
               }
               value={body}
               onChange={(e) => setBody(e.target.value)}
@@ -356,7 +359,6 @@ export function AcademicDiscussions({
               </button>
             </div>
           </form>
-          )
         ) : (
           <div className="ula-acad-disc__compose text-center">
             <p className="text-sm text-slate-600">Sign in to ask course questions or reply.</p>
